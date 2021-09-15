@@ -1,5 +1,6 @@
 package com.example.hotels.controller;
 
+import com.example.hotels.exception.NotFoundException;
 import com.example.hotels.model.Hotel;
 import com.example.hotels.model.Order;
 import com.example.hotels.model.User;
@@ -38,7 +39,7 @@ public class CabinetController {
         }
         else {
             Page<Hotel> all = hotelService.findAll(page,size,sort);
-            if (all.isEmpty()){throw new NullPointerException();}
+            if (all.isEmpty()){throw new NotFoundException("No hotels found");}
             model.addAttribute("hotels", hotelService.findAll(page, size, sort));
         }
         model.addAttribute("user",user);
@@ -54,7 +55,7 @@ public class CabinetController {
                           @RequestParam(required = false, defaultValue = "name") String sort, Model model){
         User user = userService.findCurrentUser();
         Page<Hotel> all = hotelService.findAll(page,size,sort);
-        if (all.isEmpty()){throw new NullPointerException();}
+        if (all.isEmpty()){throw new NotFoundException("No hotels found");}
         model.addAttribute("user",user);
         model.addAttribute("hotels",all);
         model.addAttribute("orders",userService.findOrdersByUser());
@@ -69,7 +70,7 @@ public class CabinetController {
         User user = userService.findCurrentUser();
         model.addAttribute("user",user);
         Hotel foundHotel = hotelService.findByName(hotel);
-        if (foundHotel == null){throw new NullPointerException();}
+        if (foundHotel == null){throw new NotFoundException("Hotel not found");}
         model.addAttribute("hotel",foundHotel);
         return "order";
     }
