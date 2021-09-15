@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hotel Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+</head>
+<body>
+    <div>
+        <div>
+            <header th:insert="fragments/header.html :: header" style="width: 100%"></header>
+        </div>
+    </div>
+    <br>
+
+    <div class="container" style="display:flex;">
+        <div class="image__wrapper">
+            <img width="300" height="200" th:src="${hotel.getHotelImageLink}"/>
+            <img width="300" height="200" th:src="${hotel.getRoomImageLink}"/>
+        </div>
+
+        <form th:action="'http://localhost:8080/cabinet/order/'+${hotel.getName}" style="margin-left:20px">
+            <input type="submit" value="Create order" class="btn btn-success"/>
+        </form>
+
+        <form th:action="'http://www.google.com/maps/place/'+${hotel.getCoordinates}" style="margin-left:5px">
+            <input type="submit" value="On Map" class="btn btn-secondary"/>
+        </form>
+    </div>
+    <br>
+    <div class="container" style="display:flex;">
+        <div class="container">
+            <a th:text="'Name :'+${hotel.getName}"></a>
+            <br>
+            <a th:text="'Stars :'+${hotel.getStars}"></a>
+            <br>
+            <a th:text="'Working status :'+${hotel.isWorkingStatus}"></a>
+            <br>
+            <a th:text="'Available rooms :'+${hotel.getAvailableRooms}"></a>
+            <br>
+            <a th:text="'Daily cost :'+${hotel.getDailyCost}"></a>
+        </div>
+        <div class="container">
+            <h3>Description</h3>
+            <a th:text="${hotel.getDescription}"></a>
+        </div>
+    </div>
+</body>
+</html>

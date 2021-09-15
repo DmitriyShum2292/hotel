@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+</head>
+<body>
+    <div>
+        <div>
+            <header th:insert="fragments/header.html :: header" style="width: 100%"></header>
+        </div>
+    </div>
+    <br>
+    <form th:method="POST" th:action="@{/registration}"  th:object="${user}">
+        <label for="login">Enter login: </label>
+        <input type="text" th:field="*{login}" name="login" id="login" required/>
+        <br>
+        <br>
+        <label for="firstName">Enter first name: </label>
+        <input type="text" th:field="*{firstName}" name="firstName" id="firstName" required/>
+        <br>
+        <br>
+        <label for="lastName">Enter last name: </label>
+        <input type="text" th:field="*{lastName}" name="lastName" id="lastName" required/>
+        <br>
+        <br>
+        <label for="phoneNumber">Enter phone number: </label>
+        <input type="text" th:field="*{phoneNumber}" name="phoneNumber" id="phoneNumber" required/>
+        <br>
+        <br>
+        <label for="password">Enter password: </label>
+        <input type="password" th:field="*{password}" name="password" id="password" required/>
+        <br>
+        <br>
+        <label for="userId">Enter user id: </label>
+        <input type="number" th:field="*{userId}" name="userId" id="userId" required/>
+        <br>
+        <br>
+        <input type="submit" value="Register" class="btn btn-success"/>
+    </form>
+
+</body>
+</html>

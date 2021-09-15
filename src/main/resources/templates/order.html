@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New order</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+</head>
+<body>
+    <div>
+        <div>
+            <header th:insert="fragments/header.html :: header" style="width: 100%"></header>
+        </div>
+    </div>
+
+    <br>
+
+    <form th:action="@{/cabinet/order}" method="post" style  = "width: 227px; height: 138px; margin-left: auto; margin-right: auto;">
+        <div><label><input type="text" name="hotelName" th:value="${hotel.getName}" placeholder="Hotel name" required autofocus/></label></div>
+        <div><label><input type="number" name="period" placeholder="Period(in days)" required autofocus/></label></div>
+        <div><label><input type="datetime-local" name="booking" placeholder="Booking date" required autofocus/></label></div>
+        <br>
+        <div><input type="submit" value="Create order" class="btn btn-success"/></div><br>
+
+    </form>
+
+</body>
+</html>

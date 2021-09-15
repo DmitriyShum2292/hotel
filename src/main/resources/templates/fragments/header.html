@@ -1,0 +1,30 @@
+<div th:fragment="header" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+    <header class="p-3 bg-dark text-white">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                    <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
+                </a>
+
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li><a href="/" class="nav-link px-2 text-white">Main</a></li>
+                    <li><a href="/cabinet" class="nav-link px-2 text-white">Cabinet</a></li>
+                    <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
+                    <li><a href="#" class="nav-link px-2 text-white">About</a></li>
+                </ul>
+
+
+                <div sec:authorize="hasRole('ANONYMOUS')" >
+                    <a class="btn btn-outline-light me-2" href="/login" style="color: white">Sign in</a>
+                    <a class="btn btn-warning" href="/registration" style="color: white">Registration</a>
+                </div>
+                <div sec:authorize="hasAnyRole('ROLE_USER','ROLE_ADMIN')">
+                    <a th:text="${user.firstName +' '+ user.lastName}" />
+                    <form th:action="@{/logout}" method="POST">
+                        <input type="submit" value="Logout" class="btn btn-warning" style="color: white"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </header>
+</div>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create hotel</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+</head>
+<body>
+
+    <div>
+        <div>
+            <header th:insert="fragments/header.html :: header" style="width: 100%"></header>
+        </div>
+    </div>
+    <br>
+    <div class="container mt-5" style  = "width: 227px; height: 138px; margin-left: auto; margin-right: auto;">
+        <form th:method="POST" th:action="@{/admin/hotel}"  th:object="${hotel}">
+            <label for="name">Enter hotel name: </label>
+            <input type="text" th:field="*{name}" name="name" id="name" required/>
+            <br>
+            <br>
+            <label for="stars">Enter stars: </label>
+            <input type="number" th:field="*{stars}" name="stars" id="stars" required/>
+            <br>
+            <br>
+            <label for="availableRooms">Enter available rooms: </label>
+            <input type="number" th:field="*{availableRooms}" name="availableRooms" id="availableRooms" required/>
+            <br>
+            <br>
+            <label for="workingStatus">Enter working status: </label>
+            <select th:field="*{workingStatus}" name="workingStatus" id="workingStatus">
+                <option th:value="1" >true</option>
+                <option th:value="0" >false</option>
+            </select>
+            <br>
+            <br>
+            <label for="dailyCost">Enter daily cost: </label>
+            <input type="number" th:field="*{dailyCost}" name="dailyCost" id="dailyCost" required/>
+            <br>
+            <br>
+            <label for="cleaningTime">Enter cleaning time: </label>
+            <input type="time" th:field="*{cleaningTime}" name="cleaningTime" id="cleaningTime" required/>
+            <br>
+            <br>
+            <label for="coordinates">Enter coordinates: </label>
+            <input type="text" th:field="*{coordinates}" name="coordinates" id="coordinates" required/>
+            <br>
+            <br>
+            <label for="hotelImageLink">Enter hotel image link: </label>
+            <input type="text" th:field="*{hotelImageLink}" name="hotelImageLink" id="hotelImageLink" required/>
+            <br>
+            <br>
+            <label for="roomImageLink">Enter room image link: </label>
+            <input type="text" th:field="*{roomImageLink}" name="roomImageLink" id="roomImageLink" required/>
+            <br>
+            <br>
+            <label for="description">Enter description: </label>
+            <input type="text" th:field="*{description}" name="description" id="description" required/>
+            <br>
+            <br>
+            <input type="submit" value="Create" class="btn btn-success"/>
+        </form>
+    </div>
+</body>
+</html>

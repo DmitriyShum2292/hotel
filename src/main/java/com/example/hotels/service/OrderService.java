@@ -1,0 +1,18 @@
+package com.example.hotels.service;
+
+import com.example.hotels.model.Hotel;
+import com.example.hotels.model.Order;
+import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+
+@Component
+public interface OrderService {
+
+    void save(Order order);
+    Order findById(long id);
+    Order findByUser();
+    boolean pay(Order order) throws IOException;
+    void delete(long id);
+
+}

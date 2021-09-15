@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <title>Personal cabinet</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+</head>
+<body>
+    <div>
+        <div>
+            <header th:insert="fragments/header.html :: header" style="width: 100%"></header>
+        </div>
+    </div>
+
+    <br>
+    <div class="panel panel-primary" >
+        <div class="panel-heading">
+            <h3 style="margin-left:20px" class="panel-title">My orders</h3>
+        </div>
+        <table class="table" >
+            <thead>
+                <tr>
+                    <th>Hotel</th>
+                    <th>Creation date</th>
+                    <th>Booking date</th>
+                    <th>Period</th>
+                    <th>Total price</th>
+                    <th>Paid</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+                <tbody th:each = "el : ${orders}">
+                    <tr>
+                        <td th:text="${el.getHotel.getName}"></td>
+                        <td th:text="${el.getCreationDate}"></td>
+                        <td th:text="${el.getBookingDate}"></td>
+                        <td th:text="${el.getPeriod}"></td>
+                        <td th:text="${el.getTotalPrice}"></td>
+                        <td th:text="${el.isPaid}"></td>
+                        <td>
+                            <div style="display:flex;">
+                                <form th:action="@{/cabinet/pay}" th:method="POST">
+                                    <input hidden type="number" th:value="${el.id}" name="id">
+                                    <input type="submit" value="Pay" class="btn btn-success" />
+                                </form>
+
+                                <form th:action="@{/cabinet/order/}+${el.getId}" method="post" style="margin-left:5px;">
+                                    <div><input type="submit" value="Delete order" class="btn btn-danger"/></div><br>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+        </table>
+    </div>
+    <br>
+    <div>
+        <h2 style="margin-left:20px;">All available hotels</h2>
+        <div style="display:flex;">
+            <form style="margin-left:20px;" th:action="@{''}" th:method="GET">
+                <select name="sort" id="sort">
+                    <option th:value="${sort}" th:text="${sort}" hidden></option>
+                    <option th:value="name" >name</option>
+                    <option th:value="stars" >stars</option>
+                    <option th:value="dailyCost" >Daily cost</option>
+                    <option th:value="workingStatus" >Working status</option>
+                </select>
+                <select name="size" id="size" >
+                    <option th:value="${size}" th:text="${size}" hidden></option>
+                    <option th:value="5" >5</option>
+                    <option th:value="10" >10</option>
+                    <option th:value="20" >20</option>
+                    <option th:value="50" >50</option>
+                </select>
+                <br>
+                <br>
+                <div style="margin-left:20px;" ><input type="submit" value="Sort" class="btn btn-success"/></div><br>
+            </form>
+            <div style="margin-left:20px;">
+                <a th:if="${currentPage!=0}" th:href="'/cabinet/'+${+currentPage-1+'?size='+size+'&sort='+sort}" th:text="${currentPage-1}"></a>
+                <a th:href="'/cabinet/'+${+currentPage+'?size='+size+'&sort='+sort}" th:text="${currentPage}"></a>
+                <a th:href="'/cabinet/'+${+currentPage+1+'?size='+size+'&sort='+sort}" th:text="${currentPage+1}"></a>
+            </div>
+            <div style="margin-left:100px;">
+                <form th:action="@{''}" th:method="GET">
+                    <p><input type="search" name="name" id="name" placeholder="Search by hotel name">
+                        <input type="submit" value="search"></p>
+                </form>
+            </div>
+
+        </div>
+
+        <table class="table" >
+            <thead>
+                <tr>
+                    <th>Images</th>
+                    <th>Name</th>
+                    <th>Stars</th>
+                    <th>Working status</th>
+                    <th>Daily cost</th>
+                    <th>Available rooms</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+                <tbody th:each = "el : ${hotels}">
+                    <tr>
+                        <td>
+                            <div class="container" style="display:flex;"    >
+                                <img width="100" height="70" th:src="${el.getHotelImageLink}"/>
+                                <img width="100" height="70" th:src="${el.getRoomImageLink}"/>
+                            </div>
+                        </td>
+                        <td th:text="${el.getName}"></td>
+                        <td th:text="${el.getStars}"></td>
+                        <td th:text="${el.isWorkingStatus}"></td>
+                        <td th:text="${el.getDailyCost}"></td>
+                        <td th:text="${el.availableRooms}"></td>
+                        <td>
+                            <div class="container" style="display:flex;">
+                                <form th:action="'http://localhost:8080/cabinet/order/'+${el.getName}">
+                                     <input type="submit" value="Create order" class="btn btn-success"/>
+                                </form>
+
+                                <form th:action="'http://localhost:8080/hotel/'+${el.getId}" style="margin-left:5px">
+                                        <input type="submit" value="Hotel page" class="btn btn-primary"/>
+                                    </form>
+
+                                <form th:action="'http://www.google.com/maps/place/'+${el.getCoordinates}" style="margin-left:5px">
+                                    <input type="submit" value="On Map" class="btn btn-secondary"/>
+                                </form>
+                            </div>
+                        </td>
+
+                    </tr>
+                </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
