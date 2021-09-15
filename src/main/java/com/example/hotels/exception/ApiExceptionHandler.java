@@ -18,4 +18,13 @@ public class ApiExceptionHandler {
         mav.addObject("exception", e.getMessage());
         return mav;
     }
+    @ExceptionHandler(value = {ForbiddenException.class})
+    public ModelAndView forbiddenException(ForbiddenException e){
+        ModelAndView mav = new ModelAndView();
+        mav.setStatus(HttpStatus.FORBIDDEN);
+        mav.setViewName("exception");
+        mav.addObject("status", HttpStatus.FORBIDDEN.toString());
+        mav.addObject("exception", e.getMessage());
+        return mav;
+    }
 }
