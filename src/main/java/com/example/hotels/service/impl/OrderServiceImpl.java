@@ -1,6 +1,8 @@
 package com.example.hotels.service.impl;
 
+import com.example.hotels.dto.Notification;
 import com.example.hotels.dto.Payment;
+import com.example.hotels.model.Hotel;
 import com.example.hotels.model.Order;
 import com.example.hotels.model.User;
 import com.example.hotels.repository.OrderRepository;
@@ -74,6 +76,33 @@ public class OrderServiceImpl implements OrderService {
         if (response.code()==200 && responsePayment.isPaid()==true){
             order.setPaid(true);
             orderRepository.save(order);
+            sendNotification(order.getHotel());
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean sendNotification(Hotel hotel) throws IOException {
+        String URL = "http://localhost:8090/test";
+        String json = null;
+        Notification notification = new Notification(hotel.getCleaningTime(),hotel.toString());
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        try {
+            json = ow.writeValueAsString(notification);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        RequestBody body = RequestBody.create(JSON,json);
+        Request request = new Request.Builder()
+                .url(URL)
+                .post(body)
+                .build();
+        Response response = okHttpClient.newCall(request).execute();
+
+        Notification responseNotification = new Gson().fromJson(response.body().string(),Notification.class);
+
+        if (response.code()==200){
             return true;
         }
         return false;
