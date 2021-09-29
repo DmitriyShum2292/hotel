@@ -10,9 +10,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.sql.DataSource;
 
-@EnableWebSecurity(debug = true)
-@Order(2)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableWebSecurity
+@Order(1)
+public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Autowired
     private DataSource dataSource;
     @Autowired
@@ -33,17 +34,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.antMatcher("/**");
-        http.authorizeRequests()
-                .antMatchers("/cabinet","/cabinet/order/**").hasAnyRole("USER", "ADMIN")
-                .antMatchers("/test").hasRole("USER")
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/login","/hotels","/hotel","/registration","/test").permitAll()
-                .and()
-                    .formLogin()
-                .and()
-                    .logout()
-                    .permitAll();
+        http.antMatcher("/api/**");
+        http.cors();
+        http.csrf().disable().authorizeRequests()
+
+                .anyRequest().permitAll();
     }
 }
-
