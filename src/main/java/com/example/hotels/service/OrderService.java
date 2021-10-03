@@ -11,7 +11,6 @@ public interface OrderService {
 
     void save(Order order);
     Order findById(long id);
-    Order findByUser();
     boolean pay(Order order) throws IOException;
     boolean sendNotification(Hotel hotel) throws IOException;
     void delete(long id);

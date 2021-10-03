@@ -48,16 +48,6 @@ public class HotelServiceImpl implements HotelService {
         return hotelRepository.findAll(pageable);
     }
 
-    @Override
-    public void updateWorkingStatus(boolean status) {
-
-    }
-
-
-    public void update(Hotel hotel) {
-    }
-
-
 
     @Override
     public void delete(long id) {

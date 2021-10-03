@@ -48,7 +48,7 @@
                                     <input type="submit" value="Pay" class="btn btn-success" />
                                 </form>
 
-                                <form th:action="@{/cabinet/order/}+${el.getId}" method="post" style="margin-left:5px;">
+                                <form th:action="@{/cabinet/order/delete/}+${el.getId}" method="GET" style="margin-left:5px;">
                                     <div><input type="submit" value="Delete order" class="btn btn-danger"/></div><br>
                                 </form>
                             </div>

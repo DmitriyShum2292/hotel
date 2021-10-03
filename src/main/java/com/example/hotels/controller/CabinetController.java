@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import java.io.IOException;
 import java.time.LocalDateTime;
 
@@ -85,7 +84,7 @@ public class CabinetController {
         return "redirect:/cabinet";
     }
 
-    @DeleteMapping("/order/{id}")
+    @GetMapping("/order/delete/{id}")
     public String deleteOrder(@PathVariable long id){
         orderService.delete(id);
         return "redirect:/cabinet";

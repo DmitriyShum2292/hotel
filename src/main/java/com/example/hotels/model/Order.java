@@ -14,7 +14,7 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private Hotel hotel;
     private LocalDateTime creationDate;
     private LocalDateTime bookingDate;
