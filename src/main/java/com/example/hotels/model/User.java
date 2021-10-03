@@ -20,9 +20,9 @@ public class User {
     private String firstName;
     private String lastName;
     private String phoneNumber;
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY)
     private List<Order> orders;
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     private Hotel hotel;
     private String password;
     private long userId;

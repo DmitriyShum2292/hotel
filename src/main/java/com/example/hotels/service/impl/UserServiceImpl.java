@@ -4,11 +4,12 @@ import com.example.hotels.model.Order;
 import com.example.hotels.model.User;
 import com.example.hotels.repository.UserRepository;
 import com.example.hotels.service.UserService;
+import org.hibernate.LazyInitializationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -36,6 +37,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(rollbackOn = LazyInitializationException.class)
     public List<Order> findOrdersByUser() {
         User user = findCurrentUser();
         return user.getOrders();

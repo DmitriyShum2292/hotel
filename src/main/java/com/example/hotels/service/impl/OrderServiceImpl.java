@@ -14,11 +14,8 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.google.gson.Gson;
 import okhttp3.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -47,10 +44,6 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findById(id);
     }
 
-    @Override
-    public Order findByUser() {
-        return null;
-    }
 
     @Override
     public boolean pay(Order order) throws IOException {

@@ -13,6 +13,5 @@ public interface HotelService {
     Hotel findByName(String name);
     List<Hotel> findAllByNameStartingWithIgnoreCase(String name);
     Page<Hotel> findAll(int page, int size,String sort);
-    void updateWorkingStatus(boolean status);
     void delete(long id);
 }

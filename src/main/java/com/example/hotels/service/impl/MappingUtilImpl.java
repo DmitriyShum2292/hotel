@@ -3,9 +3,7 @@ package com.example.hotels.service.impl;
 import com.example.hotels.dto.HotelDTO;
 import com.example.hotels.model.Hotel;
 import com.example.hotels.service.MappingUtilService;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 
