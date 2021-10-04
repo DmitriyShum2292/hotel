@@ -27,6 +27,9 @@ public class CabinetController {
     @Autowired
     private UserService userService;
 
+    private final String hotels = "hotels";
+    private final String redirectCab = "redirect:/cabinet";
+
     @GetMapping
     public String cabinet(@RequestParam(required = false,defaultValue = "0") int page,
                           @RequestParam(required = false,defaultValue = "10") int size,
@@ -34,12 +37,12 @@ public class CabinetController {
                           @RequestParam(required = false, defaultValue = "name") String sort, Model model){
         User user = userService.findCurrentUser();
         if(!name.equals("0")) {
-            model.addAttribute("hotels", hotelService.findAllByNameStartingWithIgnoreCase(name));
+            model.addAttribute(hotels, hotelService.findAllByNameStartingWithIgnoreCase(name));
         }
         else {
             Page<Hotel> all = hotelService.findAll(page,size,sort);
             if (all.isEmpty()){throw new NotFoundException("No hotels found");}
-            model.addAttribute("hotels", hotelService.findAll(page, size, sort));
+            model.addAttribute(hotels, hotelService.findAll(page, size, sort));
         }
         model.addAttribute("user",user);
         model.addAttribute("orders",userService.findOrdersByUser());
@@ -81,23 +84,23 @@ public class CabinetController {
         LocalDateTime dateTime = LocalDateTime.parse(booking);
         Order order = new Order(hotel, dateTime,period);
         orderService.save(order);
-        return "redirect:/cabinet";
+        return redirectCab;
     }
 
     @GetMapping("/order/delete/{id}")
     public String deleteOrder(@PathVariable long id){
         orderService.delete(id);
-        return "redirect:/cabinet";
+        return redirectCab;
     }
 
     @PostMapping("/pay")
     public String pay(@RequestParam long id) throws IOException {
         Order order = orderService.findById(id);
         if (order.isPaid()){
-            return "redirect:/cabinet";
+            return redirectCab;
         }
         orderService.pay(order);
-        return "redirect:/cabinet";
+        return redirectCab;
     }
 
 

@@ -33,7 +33,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void save(Order order) {
         User user = userService.findCurrentUser();
-        List<Order> orders ;
         user.getOrders().add(order);
         orderRepository.save(order);
         userService.save(user);
@@ -50,7 +49,7 @@ public class OrderServiceImpl implements OrderService {
         User user = userService.findCurrentUser();
         Payment payment = new Payment(order.getTotalPrice(), new Date(),
                 user.getUserId(), order.isPaid(), order.toString());
-        String URL = "http://localhost:8090/test";
+        String url = "http://localhost:8090/test";
         String json = null;
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         try {
@@ -60,7 +59,7 @@ public class OrderServiceImpl implements OrderService {
         }
         RequestBody body = RequestBody.create(JSON,json);
         Request request = new Request.Builder()
-                .url(URL)
+                .url(url)
                 .post(body)
                 .build();
         Response response = okHttpClient.newCall(request).execute();
@@ -77,7 +76,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public boolean sendNotification(Hotel hotel) throws IOException {
-        String URL = "http://localhost:8090/test";
+        String url = "http://localhost:8090/test";
         String json = null;
         Notification notification = new Notification(hotel.getCleaningTime(),hotel.toString());
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
@@ -88,14 +87,14 @@ public class OrderServiceImpl implements OrderService {
         }
         RequestBody body = RequestBody.create(JSON,json);
         Request request = new Request.Builder()
-                .url(URL)
+                .url(url)
                 .post(body)
                 .build();
         Response response = okHttpClient.newCall(request).execute();
 
         Notification responseNotification = new Gson().fromJson(response.body().string(),Notification.class);
 
-        if (response.code()==200){
+        if (response.code()==200&&!responseNotification.getDescription().equals("Error")){
             return true;
         }
         return false;

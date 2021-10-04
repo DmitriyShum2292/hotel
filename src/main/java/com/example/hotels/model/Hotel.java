@@ -31,8 +31,7 @@ public class Hotel {
     }
 
     public Hotel(String name, int stars, int availableRooms, boolean workingStatus,
-                 double dailyCost, LocalTime cleaningTime, String coordinates, String hotelImageLink,
-                 String roomImageLink, String description) {
+                 double dailyCost, LocalTime cleaningTime, String coordinates) {
         this.name = name;
         this.stars = stars;
         this.availableRooms = availableRooms;
@@ -40,9 +39,6 @@ public class Hotel {
         this.dailyCost = dailyCost;
         this.cleaningTime = cleaningTime;
         this.coordinates = coordinates;
-        this.hotelImageLink = hotelImageLink;
-        this.roomImageLink = roomImageLink;
-        this.description = description;
     }
 
     public long getId() {

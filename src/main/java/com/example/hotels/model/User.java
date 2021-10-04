@@ -1,8 +1,6 @@
 package com.example.hotels.model;
 
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.beans.factory.annotation.Value;
-
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
@@ -33,7 +31,7 @@ public class User {
     }
 
     public User(String login,String authority, boolean active, String firstName, String lastName,
-                String phoneNumber, List<Order> orders, String password , long userId) {
+                String phoneNumber, List<Order> orders) {
         this.login = login;
         this.authority = authority;
         this.active = active;
@@ -41,8 +39,6 @@ public class User {
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.orders = orders;
-        this.password = password;
-        this.userId = userId;
     }
 
     public long getId() {
