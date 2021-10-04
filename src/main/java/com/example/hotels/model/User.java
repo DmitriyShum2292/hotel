@@ -1,6 +1,7 @@
 package com.example.hotels.model;
 
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import java.util.List;
@@ -20,9 +21,9 @@ public class User {
     private String firstName;
     private String lastName;
     private String phoneNumber;
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Order> orders;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     private Hotel hotel;
     private String password;
     private long userId;
