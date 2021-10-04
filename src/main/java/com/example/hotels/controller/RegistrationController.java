@@ -28,7 +28,7 @@ public class RegistrationController {
         return "redirect:/cabinet";
         }
         user.setActive(true);
-        user.setAuthority("ROLE_USER");
+
         userService.save(user);
         return "redirect:/cabinet";
     }
