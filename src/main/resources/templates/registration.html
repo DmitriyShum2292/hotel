@@ -14,33 +14,45 @@
         </div>
     </div>
     <br>
-    <form th:method="POST" th:action="@{/registration}"  th:object="${user}">
-        <label for="login">Enter login: </label>
-        <input type="text" th:field="*{login}" name="login" id="login" required/>
-        <br>
-        <br>
-        <label for="firstName">Enter first name: </label>
-        <input type="text" th:field="*{firstName}" name="firstName" id="firstName" required/>
-        <br>
-        <br>
-        <label for="lastName">Enter last name: </label>
-        <input type="text" th:field="*{lastName}" name="lastName" id="lastName" required/>
-        <br>
-        <br>
-        <label for="phoneNumber">Enter phone number: </label>
-        <input type="text" th:field="*{phoneNumber}" name="phoneNumber" id="phoneNumber" required/>
-        <br>
-        <br>
-        <label for="password">Enter password: </label>
-        <input type="password" th:field="*{password}" name="password" id="password" required/>
-        <br>
-        <br>
-        <label for="userId">Enter user id: </label>
-        <input type="number" th:field="*{userId}" name="userId" id="userId" required/>
-        <br>
-        <br>
-        <input type="submit" value="Register" class="btn btn-success"/>
-    </form>
+    <div class="container mt-5" style  = "width: 227px; height: 138px; margin-left: auto; margin-right: auto;">
+        <form th:method="POST" th:action="@{/registration}"  th:object="${user}">
+            <label for="login">Enter login: </label>
+            <input type="text"  th:field="*{login}" name="login" id="login" required/>
+            <br>
+            <br>
+            <label for="firstName">Enter first name: </label>
+            <input type="text" th:field="*{firstName}" name="firstName" id="firstName" required/>
+            <br>
+            <br>
+            <label for="lastName">Enter last name: </label>
+            <input type="text" th:field="*{lastName}" name="lastName" id="lastName" required/>
+            <br>
+            <br>
+            <label for="phoneNumber" >Enter phone number: </label>
+            <input type="text"  th:field="*{phoneNumber}" name="phoneNumber" id="phoneNumber" required/>
+            <br>
+            <br>
+            <label for="password">Enter password: </label>
+            <input type="password" min="8" max="12" th:field="*{password}" name="password" id="password" required/>
+            <br>
+            <br>
+            <label for="userId">Enter user id: </label>
+            <input type="number" th:field="*{userId}" name="userId" id="userId" required/>
+            <br>
+            <br>
+            <label for="authority">Authority : </label>
+            <select th:field="*{authority}" name="authority" id="authority">
+                <option th:value="ROLE_USER" >Simple user</option>
+                <option th:value="ROLE_ADMIN" >Hotel manager</option>
+            </select>
+            <br>
+            <br>
+            <input type="submit" value="Register" class="btn btn-success"/>
+
+            <br>
+            <br>
+        </form>
+    </div>
 
 </body>
 </html>

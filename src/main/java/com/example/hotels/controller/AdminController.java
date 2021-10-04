@@ -10,8 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -23,11 +21,14 @@ public class AdminController {
     @Autowired
     private OrderService orderService;
 
+    private final  String hotelName = "hotel";
+    private final String redirectAdmin = "redirect:/admin";
+
     @GetMapping
     public String adminPage(Model model){
         User user = userService.findCurrentUser();
         model.addAttribute("user", user);
-        model.addAttribute("hotel", user.getHotel());
+        model.addAttribute(hotelName, user.getHotel());
         return "admin_cabinet";
     }
     @GetMapping("/hotel")
@@ -35,7 +36,7 @@ public class AdminController {
         User user = userService.findCurrentUser();
         Hotel hotel = new Hotel();
         model.addAttribute("user", user);
-        model.addAttribute("hotel", hotel);
+        model.addAttribute(hotelName, hotel);
         return "create_hotel";
     }
     @PostMapping("/hotel")
@@ -44,23 +45,23 @@ public class AdminController {
         hotelService.save(hotel);
         user.setHotel(hotel);
         userService.save(user);
-        return "redirect:/admin";
+        return redirectAdmin;
     }
     @GetMapping("/hotel/update")
     public String updateHotelPage(Model model){
         User user = userService.findCurrentUser();
         model.addAttribute("user", user);
-        model.addAttribute("hotel", user.getHotel());
+        model.addAttribute(hotelName, user.getHotel());
         return "update_hotel";
     }
     @PostMapping("/hotel/update")
     public String updateHotel(@ModelAttribute("hotel")Hotel hotel){
         hotelService.save(hotel);
-        return "redirect:/admin";
+        return redirectAdmin;
     }
     @DeleteMapping("/hotel/{id}")
     public String deleteHotel(@PathVariable long id){
         hotelService.delete(id);
-        return "redirect:/admin";
+        return redirectAdmin;
     }
 }
