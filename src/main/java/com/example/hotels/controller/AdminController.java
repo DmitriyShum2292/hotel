@@ -8,7 +8,10 @@ import com.example.hotels.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/admin")
@@ -40,7 +43,13 @@ public class AdminController {
         return "create_hotel";
     }
     @PostMapping("/hotel")
-    public String createHotel(@ModelAttribute("hotel") Hotel hotel){
+    public String createHotel(@ModelAttribute("hotel") @Valid Hotel hotel, BindingResult bindingResult, Model model){
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("error",bindingResult.getFieldErrors());
+            User user = userService.findCurrentUser();
+            model.addAttribute("user", user);
+            return "create_hotel";
+        }
         User user = userService.findCurrentUser();
         hotelService.save(hotel);
         user.setHotel(hotel);
