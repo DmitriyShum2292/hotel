@@ -2,6 +2,8 @@ package com.example.hotels.model;
 
 import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Objects;
 
@@ -13,16 +15,24 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    @NotNull(message = "Login can't be empty")
+    @Size(min = 6,max = 12,message = "login must be 6 - 12 characters")
     private String login;
     private String authority;
     private boolean active;
+    @NotNull(message = "First name should not be empty")
+    @Size(min = 2,max = 20,message = "First name should be 2 - 20 characters")
     private String firstName;
+    @NotNull(message = "Last name should not be empty")
+    @Size(min = 2,max = 20,message = "Last name should be 2 - 20 characters")
     private String lastName;
     private String phoneNumber;
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Order> orders;
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     private Hotel hotel;
+    @NotNull(message = "Password name should not be empty")
+    @Size(min = 2,max = 20,message = "password must be 2 - 20 characters")
     private String password;
     private long userId;
 
