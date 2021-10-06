@@ -17,6 +17,20 @@
     </div>
     <br>
     <div class="container mt-5" style  = "width: 227px; height: 138px; margin-left: auto; margin-right: auto;">
+        <table class="table" th:if="${error}">
+            <thead>
+            <tr>
+                <th style="color:red;">Error</th>
+            </tr>
+            </thead>
+            <tbody th:each = "el : ${error}">
+            <tr>
+                <td style="color:red;" th:text="${el.getDefaultMessage()}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <br>
         <form th:method="POST" th:action="@{/admin/hotel}"  th:object="${hotel}">
             <label for="name">Enter hotel name: </label>
             <input type="text" th:field="*{name}" name="name" id="name" required/>

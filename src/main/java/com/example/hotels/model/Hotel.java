@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.time.LocalTime;
 import java.util.Objects;
 
@@ -16,12 +18,15 @@ public class Hotel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    @NotEmpty(message = "Name can't be empty")
+    @Size(min = 2,max = 20,message = "Name should be 2 - 20 characters")
     private String name;
     private int stars;
     private int availableRooms;
     private boolean workingStatus;
     private double dailyCost;
     private LocalTime cleaningTime;
+    @NotEmpty(message = "Coordinates can't be empty")
     private String coordinates;
     private String hotelImageLink;
     private String roomImageLink;
