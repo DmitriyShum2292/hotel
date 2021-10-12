@@ -3,9 +3,7 @@ package com.example.hotels.service;
 import com.example.hotels.model.Order;
 import com.example.hotels.model.User;
 import org.springframework.stereotype.Component;
-
 import java.io.IOException;
-import java.net.ProtocolException;
 import java.util.List;
 
 @Component
