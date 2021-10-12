@@ -103,4 +103,17 @@ public class Order {
     public int hashCode() {
         return Objects.hash(id, hotel, creationDate, bookingDate, period, totalPrice, paid);
     }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", hotel=" + hotel +
+                ", creationDate=" + creationDate +
+                ", bookingDate=" + bookingDate +
+                ", period=" + period +
+                ", totalPrice=" + totalPrice +
+                ", paid=" + paid +
+                '}';
+    }
 }
