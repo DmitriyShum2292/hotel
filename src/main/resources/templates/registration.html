@@ -13,8 +13,24 @@
             <header th:insert="fragments/header.html :: header" style="width: 100%"></header>
         </div>
     </div>
+
     <br>
     <div class="container mt-5" style  = "width: 227px; height: 138px; margin-left: auto; margin-right: auto;">
+
+        <table class="table" th:if="${error}">
+            <thead>
+            <tr>
+                <th style="color:red;">Error</th>
+            </tr>
+            </thead>
+            <tbody th:each = "el : ${error}">
+            <tr>
+                <td style="color:red;" th:text="${el.getDefaultMessage()}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <br>
         <form th:method="POST" th:action="@{/registration}"  th:object="${user}">
             <label for="login">Enter login: </label>
             <input type="text"  th:field="*{login}" name="login" id="login" required/>

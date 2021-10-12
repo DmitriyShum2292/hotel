@@ -3,6 +3,7 @@ package com.example.hotels.model;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -17,6 +18,7 @@ public class Order {
     @OneToOne(fetch = FetchType.LAZY)
     private Hotel hotel;
     private LocalDateTime creationDate;
+    @NotEmpty(message = "Booking date can't be empty")
     private LocalDateTime bookingDate;
     private int period;
     private double totalPrice;
@@ -100,5 +102,18 @@ public class Order {
     @Override
     public int hashCode() {
         return Objects.hash(id, hotel, creationDate, bookingDate, period, totalPrice, paid);
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", hotel=" + hotel +
+                ", creationDate=" + creationDate +
+                ", bookingDate=" + bookingDate +
+                ", period=" + period +
+                ", totalPrice=" + totalPrice +
+                ", paid=" + paid +
+                '}';
     }
 }
