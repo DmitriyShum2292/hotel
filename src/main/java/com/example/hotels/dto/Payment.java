@@ -1,37 +1,23 @@
 package com.example.hotels.dto;
 
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Objects;
 
 public class Payment {
 
-    private long id;
-    private double amount;
-    private Date date;
-    private long user_id;
-    private boolean paid;
-    private String description;
 
+    private double amount;
+    private long citizenCardNumber;
+    private String description;
+    private String serviceName;
 
     public Payment() {
     }
 
-    public Payment(double amount, Date date, long user_id,
-                   boolean paid, String description) {
+    public Payment(double amount, long citizenCardNumber, String description, String serviceName) {
         this.amount = amount;
-        this.date = date;
-        this.user_id = user_id;
-        this.paid = paid;
+        this.citizenCardNumber = citizenCardNumber;
         this.description = description;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+        this.serviceName = serviceName;
     }
 
     public double getAmount() {
@@ -42,28 +28,12 @@ public class Payment {
         this.amount = amount;
     }
 
-    public Date getDate() {
-        return date;
+    public long getCitizenCardNumber() {
+        return citizenCardNumber;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public long getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(long user_id) {
-        this.user_id = user_id;
-    }
-
-    public boolean isPaid() {
-        return paid;
-    }
-
-    public void setPaid(boolean paid) {
-        this.paid = paid;
+    public void setCitizenCardNumber(long citizenCardNumber) {
+        this.citizenCardNumber = citizenCardNumber;
     }
 
     public String getDescription() {
@@ -74,28 +44,34 @@ public class Payment {
         this.description = description;
     }
 
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Payment payment = (Payment) o;
-        return id == payment.id && Double.compare(payment.amount, amount) == 0 && user_id == payment.user_id && paid == payment.paid && Objects.equals(date, payment.date) && Objects.equals(description, payment.description);
+        return Double.compare(payment.amount, amount) == 0 && citizenCardNumber == payment.citizenCardNumber && description.equals(payment.description) && serviceName.equals(payment.serviceName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, amount, date, user_id, paid, description);
+        return Objects.hash(amount, citizenCardNumber, description, serviceName);
     }
 
     @Override
     public String toString() {
         return "Payment{" +
-                "id=" + id +
-                ", amount=" + amount +
-                ", date=" + date +
-                ", user_id=" + user_id +
-                ", paid=" + paid +
+                "amount=" + amount +
+                ", citizenCardNumber=" + citizenCardNumber +
                 ", description='" + description + '\'' +
+                ", serviceName='" + serviceName + '\'' +
                 '}';
     }
 }

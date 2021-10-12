@@ -35,7 +35,6 @@ public class RegistrationController {
         return "redirect:/cabinet";
         }
         user.setActive(true);
-
         userService.save(user);
         return "redirect:/cabinet";
     }
