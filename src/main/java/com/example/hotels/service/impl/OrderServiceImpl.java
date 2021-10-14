@@ -46,12 +46,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Value("citizen.account.baseurl")
     private String BASE_URL;
-    @Value("citizen.account.payment.mapping")
+    @Value("${citizen.account.payment.mapping}")
     private String PAYMENT_URL;
-    @Value("hotels.keyid")
+    @Value("${hotels.keyid}")
     private String keyId;
-    @Value("citizen.account.action")
+    @Value("${citizen.account.action}")
     private String action;
+    @Value("${city.management.legalentity.create.mapping}")
+    private String CREATE_NEW_LEGAL_MAPPING;
 
     @Override
     public void save(Order order) {
