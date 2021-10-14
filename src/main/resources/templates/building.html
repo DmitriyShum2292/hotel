@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Choose building</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+</head>
+<body>
+
+    <div>
+        <div>
+            <header th:insert="fragments/header.html :: header" style="width: 100%"></header>
+        </div>
+    </div>
+    <div class="container mt-5" style  = "width: 227px; height: 138px; margin-left: auto; margin-right: auto;">
+        <table class="table" th:if="${buildings}">
+            <thead>
+            <tr>
+                <th>building id</th>
+                <th>building number</th>
+                <th>building type</th>
+                <th>action</th>
+            </tr>
+            </thead>
+            <tbody th:each = "el : ${buildings}">
+            <tr>
+                <td  th:text="${el.getId()}"></td>
+                <td  th:text="${el.getBuildingNumber()}"></td>
+                <td  th:text="${el.getBuildingType}"></td>
+                <td>
+                    <form th:action="@{/admin/hotel}" th:method="GET">
+                        <input hidden type="number" th:value="${el.getId()}" name="buildingId" id="buildingId">
+                        <input type="submit" value="Select" class="btn btn-success" />
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
