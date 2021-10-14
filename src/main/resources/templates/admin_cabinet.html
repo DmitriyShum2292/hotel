@@ -14,13 +14,21 @@
             <header th:insert="fragments/header.html :: header" style="width: 100%"></header>
         </div>
     </div>
-    <br>
-    <div th:if="${user.getHotel==null}" class="container">
-        <form th:action="'http://localhost:8080/admin/hotel'" style="margin-left:5px">
-            <input type="submit" value="Create hotel" class="btn btn-success"/>
-        </form>
+    <div th:if="${user.getHotel==null}" class="container mt-5" style  = "width: 227px; height: 138px; margin-left: auto; margin-right: auto;">
+        <br>
+        <br>
+
+            <br>
+            <br>
+            <h2>You don't have a hotel yet</h2>
+            <br>
+            <br>
+            <form th:action="'http://localhost:8080/admin/hotel'" style="margin-left:5px">
+                <input type="submit" value="Create hotel" class="btn btn-success"/>
+            </form>
+
+        <br>
     </div>
-    <br>
     <div>
         <h2>My hotel</h2>
         <table class="table" th:if="${user.getHotel!=null}">
