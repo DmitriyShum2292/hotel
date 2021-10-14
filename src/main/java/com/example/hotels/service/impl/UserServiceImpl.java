@@ -9,16 +9,12 @@ import com.example.hotels.model.User;
 import com.example.hotels.repository.UserRepository;
 import com.example.hotels.service.ExternalApiService;
 import com.example.hotels.service.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-
-import com.google.gson.JsonObject;
 import okhttp3.*;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
@@ -29,11 +25,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.io.IOException;
 
@@ -73,7 +67,9 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
         }
     }
-
+    /**
+     * http get request to city management for check exist user
+     */
     @Override
     public boolean citizenExist(User user) throws IOException {
         long now = new Date().getTime()+30000000;
