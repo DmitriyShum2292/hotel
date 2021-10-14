@@ -31,12 +31,13 @@ public class Hotel {
     private String hotelImageLink;
     private String roomImageLink;
     private String description;
+    private long homeId;
 
     public Hotel() {
     }
 
     public Hotel(String name, int stars, int availableRooms, boolean workingStatus,
-                 double dailyCost, LocalTime cleaningTime, String coordinates) {
+                 double dailyCost, LocalTime cleaningTime, String coordinates,long homeId) {
         this.name = name;
         this.stars = stars;
         this.availableRooms = availableRooms;
@@ -44,6 +45,7 @@ public class Hotel {
         this.dailyCost = dailyCost;
         this.cleaningTime = cleaningTime;
         this.coordinates = coordinates;
+        this.homeId = homeId;
     }
 
     public long getId() {
@@ -134,17 +136,25 @@ public class Hotel {
         this.description = description;
     }
 
+    public long getHomeId() {
+        return homeId;
+    }
+
+    public void setHomeId(long homeId) {
+        this.homeId = homeId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Hotel hotel = (Hotel) o;
-        return id == hotel.id && stars == hotel.stars && availableRooms == hotel.availableRooms && workingStatus == hotel.workingStatus && Double.compare(hotel.dailyCost, dailyCost) == 0 && Objects.equals(name, hotel.name) && Objects.equals(cleaningTime, hotel.cleaningTime) && Objects.equals(coordinates, hotel.coordinates);
+        return id == hotel.id && stars == hotel.stars && availableRooms == hotel.availableRooms && workingStatus == hotel.workingStatus && Double.compare(hotel.dailyCost, dailyCost) == 0 && homeId == hotel.homeId && Objects.equals(name, hotel.name) && Objects.equals(cleaningTime, hotel.cleaningTime) && Objects.equals(coordinates, hotel.coordinates) && Objects.equals(hotelImageLink, hotel.hotelImageLink) && Objects.equals(roomImageLink, hotel.roomImageLink) && Objects.equals(description, hotel.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, stars, availableRooms, workingStatus, dailyCost, cleaningTime, coordinates);
+        return Objects.hash(id, name, stars, availableRooms, workingStatus, dailyCost, cleaningTime, coordinates, hotelImageLink, roomImageLink, description, homeId);
     }
 
     @Override
@@ -158,6 +168,10 @@ public class Hotel {
                 ", dailyCost=" + dailyCost +
                 ", cleaningTime=" + cleaningTime +
                 ", coordinates='" + coordinates + '\'' +
+                ", hotelImageLink='" + hotelImageLink + '\'' +
+                ", roomImageLink='" + roomImageLink + '\'' +
+                ", description='" + description + '\'' +
+                ", homeId=" + homeId +
                 '}';
     }
 }
