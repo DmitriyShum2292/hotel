@@ -31,7 +31,10 @@
         </table>
         <br>
         <br>
-        <form th:method="POST" th:action="@{/admin/hotel}"  th:object="${hotel}">
+
+        <br>
+        <br>
+        <form  th:method="POST" th:action="@{/admin/hotel}"  th:object="${hotel}">
             <label for="name">Enter hotel name: </label>
             <input type="text" th:field="*{name}" name="name" id="name" required/>
             <br>
@@ -73,6 +76,10 @@
             <br>
             <label for="description">Enter description: </label>
             <input type="text" th:field="*{description}" name="description" id="description" required/>
+            <br>
+            <br>
+            <label for="homeId">Your homeId: </label>
+            <input type="number"  th:value="${homeId}"  th:name="homeId" id="homeId" required/>
             <br>
             <br>
             <input type="submit" value="Create" class="btn btn-success"/>
