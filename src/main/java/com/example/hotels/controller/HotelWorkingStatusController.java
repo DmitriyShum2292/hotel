@@ -37,7 +37,7 @@ public class HotelWorkingStatusController {
     }
 
     @PostMapping
-    public ResponseEntity<HotelDTO> setWorkingStatus(@RequestBody HotelDTO hotelDTO){
+    public ResponseEntity<HotelDTO> setWorkingStatus(@RequestBody HotelDTO hotelDTO) throws IOException {
         Hotel hotel = hotelService.findById(hotelDTO.getId());
         if (hotel.getName().equals(hotelDTO.getName())){
             hotel.setWorkingStatus(hotelDTO.isWorkingStatus());
