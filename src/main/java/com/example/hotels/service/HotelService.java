@@ -24,6 +24,6 @@ public interface HotelService {
     List<StreetDTO> getAllStreetsByDistrict(long districtId) throws IOException;
     List<CommercialBuildingDTO> getAllCommercialBuildingByStreet(long streetId) throws IOException;
     List<BuildingInfoDTO> getAllBuildingInfoByCommercialBuilding(long commercialBuildingId) throws IOException;
-    boolean saveLegalEntityInCityManagement(long homeId) throws IOException;
+    boolean saveLegalEntityInCityManagement(long homeId,Hotel hotel) throws IOException;
 
 }
