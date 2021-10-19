@@ -37,12 +37,15 @@ public class HotelWorkingStatusController {
     }
 
     @PostMapping
-    public ResponseEntity<HotelDTO> setWorkingStatus(@RequestBody HotelDTO hotelDTO) throws IOException {
-        Hotel hotel = hotelService.findById(hotelDTO.getId());
-        if (hotel.getName().equals(hotelDTO.getName())){
-            hotel.setWorkingStatus(hotelDTO.isWorkingStatus());
-            hotelService.save(hotel);
-            return new ResponseEntity<>(hotelDTO,HttpStatus.OK);
+    public ResponseEntity<HotelDTO> setWorkingStatus(@RequestBody HotelDTO hotelDTO,ServletRequest request)
+            throws IOException, ServletException {
+        if(hmacAuthFilter.doFilter(request)) {
+            Hotel hotel = hotelService.findById(hotelDTO.getId());
+            if (hotel.getName().equals(hotelDTO.getName())) {
+                hotel.setWorkingStatus(hotelDTO.isWorkingStatus());
+                hotelService.save(hotel);
+                return new ResponseEntity<>(hotelDTO, HttpStatus.OK);
+            }
         }
         return new ResponseEntity<>(hotelDTO,HttpStatus.BAD_REQUEST);
     }
