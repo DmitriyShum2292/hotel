@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
+
 import java.io.IOException;
 import java.time.LocalDateTime;
 
@@ -94,13 +96,18 @@ public class CabinetController {
     }
 
     @PostMapping("/pay")
-    public String pay(@RequestParam long id) throws IOException {
+    public RedirectView pay(@RequestParam long id) throws IOException {
         Order order = orderService.findById(id);
         if (order.isPaid()){
-            return redirectCab;
+            RedirectView redirectView = new RedirectView();
+            redirectView.setUrl(redirectCab);
+            return redirectView;
         }
-        orderService.pay(order);
-        return redirectCab;
+        String url = orderService.pay(order);
+
+        RedirectView redirectView = new RedirectView();
+        redirectView.setUrl(url);
+        return redirectView;
     }
 
 
