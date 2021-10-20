@@ -4,20 +4,37 @@ import java.util.Objects;
 
 public class Payment {
 
-
+    private String serviceName;
+    private String description;
     private double amount;
     private long citizenCardNumber;
-    private String description;
-    private String serviceName;
+    private String redirectUrl;
 
     public Payment() {
     }
 
-    public Payment(double amount, long citizenCardNumber, String description, String serviceName) {
+    public Payment(String serviceName, String description, double amount, long citizenCardNumber, String redirectUrl) {
+        this.serviceName = serviceName;
+        this.description = description;
         this.amount = amount;
         this.citizenCardNumber = citizenCardNumber;
-        this.description = description;
+        this.redirectUrl = redirectUrl;
+    }
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
         this.serviceName = serviceName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public double getAmount() {
@@ -36,20 +53,12 @@ public class Payment {
         this.citizenCardNumber = citizenCardNumber;
     }
 
-    public String getDescription() {
-        return description;
+    public String getRedirectUrl() {
+        return redirectUrl;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getServiceName() {
-        return serviceName;
-    }
-
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
+    public void setRedirectUrl(String redirectUrl) {
+        this.redirectUrl = redirectUrl;
     }
 
     @Override
@@ -57,21 +66,22 @@ public class Payment {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Payment payment = (Payment) o;
-        return Double.compare(payment.amount, amount) == 0 && citizenCardNumber == payment.citizenCardNumber && description.equals(payment.description) && serviceName.equals(payment.serviceName);
+        return Double.compare(payment.amount, amount) == 0 && Objects.equals(serviceName, payment.serviceName) && Objects.equals(description, payment.description) && Objects.equals(citizenCardNumber, payment.citizenCardNumber) && Objects.equals(redirectUrl, payment.redirectUrl);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(amount, citizenCardNumber, description, serviceName);
+        return Objects.hash(serviceName, description, amount, citizenCardNumber, redirectUrl);
     }
 
     @Override
     public String toString() {
         return "Payment{" +
-                "amount=" + amount +
-                ", citizenCardNumber=" + citizenCardNumber +
+                "serviceName='" + serviceName + '\'' +
                 ", description='" + description + '\'' +
-                ", serviceName='" + serviceName + '\'' +
+                ", amount=" + amount +
+                ", citizenCardNumber='" + citizenCardNumber + '\'' +
+                ", redirectUrl='" + redirectUrl + '\'' +
                 '}';
     }
 }
