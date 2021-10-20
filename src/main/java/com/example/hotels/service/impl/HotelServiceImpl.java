@@ -74,7 +74,7 @@ public class HotelServiceImpl implements HotelService {
 
     @Override
     public void save(Hotel hotel) throws IOException {
-        if(saveLegalEntityInCityManagement(hotel.getHomeId())) {
+        if(saveLegalEntityInCityManagement(hotel.getHomeId(),hotel)) {
             hotelRepository.save(hotel);
         }
     }
@@ -249,9 +249,9 @@ public class HotelServiceImpl implements HotelService {
      * http post request with HMAC headers to city management for save new legal entity and set owner
      */
     @Override
-    public boolean saveLegalEntityInCityManagement(long homeId) throws IOException {
+    public boolean saveLegalEntityInCityManagement(long homeId,Hotel hotel) throws IOException {
         User user = userService.findCurrentUser();
-        NewLegalEntityDTO newLegalEntityDTO = new NewLegalEntityDTO("Hotel",homeId, user.getUserId());
+        NewLegalEntityDTO newLegalEntityDTO = new NewLegalEntityDTO(hotel.getName(),homeId, user.getUserId());
 
         long now = new Date().getTime()+30000000;
         String timestamp = String.valueOf(now);

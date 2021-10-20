@@ -1,8 +1,10 @@
 package com.example.hotels.controller;
 
+import com.example.hotels.model.Order;
 import com.example.hotels.model.User;
 import com.example.hotels.service.ExternalApiService;
 import com.example.hotels.service.HotelService;
+import com.example.hotels.service.OrderService;
 import com.example.hotels.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +25,8 @@ public class MainController {
     private ExternalApiService externalApiService;
     @Autowired
     private HotelService hotelService;
+    @Autowired
+    private OrderService orderService;
     public Logger logger = LoggerFactory.getLogger(MainController.class);
 
 

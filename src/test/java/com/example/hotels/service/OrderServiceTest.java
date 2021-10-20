@@ -33,7 +33,7 @@ class OrderServiceTest {
         order = new Order();
         order.setId(1);
         order.setPeriod(1);
-        order.setTotalPrice(2.5);
+        order.setTotalPrice(2);
         order.setPaid(true);
         user.setOrders(Arrays.asList(order));
     }
