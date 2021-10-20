@@ -24,7 +24,7 @@ public class Hotel {
     private int stars;
     private int availableRooms;
     private boolean workingStatus;
-    private double dailyCost;
+    private long dailyCost;
     private LocalTime cleaningTime;
     @NotEmpty(message = "Coordinates can't be empty")
     private String coordinates;
@@ -37,7 +37,7 @@ public class Hotel {
     }
 
     public Hotel(String name, int stars, int availableRooms, boolean workingStatus,
-                 double dailyCost, LocalTime cleaningTime, String coordinates,long homeId) {
+                 long dailyCost, LocalTime cleaningTime, String coordinates,long homeId) {
         this.name = name;
         this.stars = stars;
         this.availableRooms = availableRooms;
@@ -92,7 +92,7 @@ public class Hotel {
         return dailyCost;
     }
 
-    public void setDailyCost(double dailyCost) {
+    public void setDailyCost(long dailyCost) {
         this.dailyCost = dailyCost;
     }
 

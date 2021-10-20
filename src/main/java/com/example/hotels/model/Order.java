@@ -21,7 +21,7 @@ public class Order {
     @NotEmpty(message = "Booking date can't be empty")
     private LocalDateTime bookingDate;
     private int period;
-    private double totalPrice;
+    private long totalPrice;
     private boolean paid;
 
     public Order() {
@@ -32,7 +32,7 @@ public class Order {
         this.creationDate = LocalDateTime.now();
         this.bookingDate = bookingDate;
         this.period = period;
-        this.totalPrice = hotel.getDailyCost()*period;
+        this.totalPrice = (long) (hotel.getDailyCost()*period);
     }
 
     public long getId() {
@@ -79,7 +79,7 @@ public class Order {
         return totalPrice;
     }
 
-    public void setTotalPrice(double totalPrice) {
+    public void setTotalPrice(long totalPrice) {
         this.totalPrice = totalPrice;
     }
 

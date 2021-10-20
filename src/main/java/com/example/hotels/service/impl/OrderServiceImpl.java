@@ -1,7 +1,7 @@
 package com.example.hotels.service.impl;
 
-import com.example.hotels.dto.Notification;
-import com.example.hotels.dto.Payment;
+import com.example.hotels.dto.*;
+import com.example.hotels.exception.NotFoundException;
 import com.example.hotels.hmac.HMACUtil;
 import com.example.hotels.model.Hotel;
 import com.example.hotels.model.Order;
@@ -15,11 +15,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.google.gson.Gson;
 import okhttp3.*;
+import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -55,6 +59,8 @@ public class OrderServiceImpl implements OrderService {
     @Value("${city.management.legalentity.create.mapping}")
     private String CREATE_NEW_LEGAL_MAPPING;
 
+    public Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
+
     @Override
     public void save(Order order) {
         User user = userService.findCurrentUser();
@@ -70,43 +76,49 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public boolean pay(Order order) throws IOException {
+    public String pay(Order order) throws IOException {
         User user = userService.findCurrentUser();
-        Payment payment = new Payment(order.getTotalPrice(),user.getUserId(),order.toString(),keyId);
+        Payment payment = new Payment("HOTELS","order",order.getTotalPrice(),
+                user.getUserId(),"");
+
+        logger.info(payment.toString());
 
         long now = new Date().getTime()+30000000;
         String timestamp = String.valueOf(now);
         String secretKey = externalApiService.findByKeyId(keyId).getValue();
-        String signature = hmacUtil.calculateHash(keyId,timestamp,action,secretKey);
+        String signature = hmacUtil.calculateHash(keyId,timestamp,"action",secretKey);
 
-        HttpUrl.Builder urlBuilder
-                = HttpUrl.parse(BASE_URL + PAYMENT_URL+user.getUserId()).newBuilder();
-        String url = urlBuilder.build().toString();
+
+        String url = "http://ec2-34-224-3-79.compute-1.amazonaws.com/api/v1/payment/pay-url";
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = ow.writeValueAsString(payment);
         StringEntity entity = new StringEntity(json);
 
+        logger.info("******"+url);
         CloseableHttpClient client = HttpClients.createDefault();
-        try {
-            HttpPost httpPost = new HttpPost(url);
-            httpPost.setHeader("Content-type", "application/json");
-            httpPost.setEntity(entity);
-            httpPost.addHeader("sm-keyid",keyId);
-            httpPost.addHeader("sm-timestamp",timestamp);
-            httpPost.addHeader("sm-action",action);
-            httpPost.addHeader("sm-signture",signature);
 
-            CloseableHttpResponse response = client.execute(httpPost);
-            if(response.getStatusLine().getStatusCode()==200){
-                order.setPaid(true);
-                orderRepository.save(order);
-                return true;
-            }
+        HttpPost httpPost = new HttpPost(url);
+        httpPost.setHeader("Content-type", "application/json");
+        httpPost.addHeader(HttpHeaders.USER_AGENT, "Googlebot");
+        httpPost.setEntity(entity);
+        httpPost.addHeader("sm-keyid",keyId);
+        httpPost.addHeader("sm-timestamp",timestamp);
+        httpPost.addHeader("sm-action","action");
+        httpPost.addHeader("sm-signature",signature);
+        httpPost.setEntity(entity);
+        CloseableHttpResponse response = client.execute(httpPost);
+
+        String obj = new String(EntityUtils.toString(response.getEntity()));
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        PaymentUrlResponseDTO paymentUrlResponseDTO = objectMapper.readValue(obj,PaymentUrlResponseDTO.class);
+        logger.info(obj);
+        response.close();
+        client.close();
+        if (paymentUrlResponseDTO!=null){
+            return paymentUrlResponseDTO.getObject();
         }
-        finally {
-            client.close();
-        }
-        return false;
+        throw new NotFoundException("Error!");
     }
 
     @Override
