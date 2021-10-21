@@ -59,6 +59,8 @@ public class OrderServiceImpl implements OrderService {
     private String action;
     @Value("${city.management.legalentity.create.mapping}")
     private String CREATE_NEW_LEGAL_MAPPING;
+    @Value("${citizen.account.notification.mapping}")
+    private String NOTIFICATION_MAPPING;
 
     public Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
@@ -121,23 +123,20 @@ public class OrderServiceImpl implements OrderService {
         if (paymentUrlResponseDTO!=null){
             return paymentUrlResponseDTO.getObject();
         }
-        throw new NotFoundException("Error!");
+        throw new NotFoundException("User with citizen card number: "+user.getUserId()+" doesn't exist");
     }
 
     @Override
-    public boolean sendNotification(Hotel hotel) throws IOException {
-        String url = "http://localhost:8090/test";
+    public boolean sendNotification(Hotel hotel) throws IOException,JsonProcessingException {
         String json = null;
         Notification notification = new Notification(hotel.getCleaningTime(),hotel.toString());
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        try {
-            json = ow.writeValueAsString(notification);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+
+        json = ow.writeValueAsString(notification);
+
         RequestBody body = RequestBody.create(JSON,json);
         Request request = new Request.Builder()
-                .url(url)
+                .url(NOTIFICATION_MAPPING)
                 .post(body)
                 .build();
         Response response = okHttpClient.newCall(request).execute();
@@ -167,7 +166,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public boolean paymentResponse(CompleteRequestDTO completeRequestDTO) {
+    public void setPaid(CompleteRequestDTO completeRequestDTO) {
         User user = userService.findByUserId(completeRequestDTO.getCitizenCardId());
         Optional<Order> filteredOrder = user.getOrders().stream()
                 .filter(c -> c.getTotalPrice()==completeRequestDTO.getAmount() && !c.isPaid())
@@ -176,8 +175,9 @@ public class OrderServiceImpl implements OrderService {
             Order order = filteredOrder.get();
             order.setPaid(true);
             orderRepository.save(order);
-            return true;
         }
-        return false;
+        else {
+            throw new NotFoundException("Order doesn't exist!");
+        }
     }
 }

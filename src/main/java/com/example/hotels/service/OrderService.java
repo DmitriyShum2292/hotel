@@ -15,6 +15,6 @@ public interface OrderService {
     String pay(Order order) throws IOException;
     boolean sendNotification(Hotel hotel) throws IOException;
     void delete(long id);
-    boolean paymentResponse(CompleteRequestDTO completeRequestDTO);
+    void setPaid(CompleteRequestDTO completeRequestDTO);
 
 }
