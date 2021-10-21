@@ -1,14 +1,11 @@
 package com.example.hotels.config;
 
-import com.example.hotels.hmac.HMACAuthFilter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.session.ConcurrentSessionFilter;
 
 import javax.sql.DataSource;
 
@@ -34,12 +31,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.antMatcher("/**");
+        http.csrf().ignoringAntMatchers("/api/v1/payment","/api/v1/hotels");
         http.authorizeRequests()
+                .antMatchers("/login","/hotels","/hotel","/registration").permitAll()
                 .antMatchers("/cabinet","/cabinet/order/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers().hasRole("USER")
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/login","/hotels","/hotel","/registration","/api/v1/hotels/test").permitAll()
                 .and()
                     .formLogin()
                 .and()
