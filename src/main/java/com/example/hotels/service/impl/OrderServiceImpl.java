@@ -75,7 +75,9 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findById(id);
     }
 
-
+    /**
+     * http method for get payment url from citizen account
+     */
     @Override
     public String pay(Order order) throws IOException {
         User user = userService.findCurrentUser();
