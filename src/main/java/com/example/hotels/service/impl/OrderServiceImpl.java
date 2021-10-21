@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @PropertySource("classpath:external.properties")
@@ -147,7 +148,6 @@ public class OrderServiceImpl implements OrderService {
         return false;
     }
 
-
     @Override
     public void delete(long id) {
         User user = userService.findCurrentUser();
@@ -162,5 +162,20 @@ public class OrderServiceImpl implements OrderService {
         user.setOrders(orders);
         userService.save(user);
         orderRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean paymentResponse(CompleteRequestDTO completeRequestDTO) {
+        User user = userService.findByUserId(completeRequestDTO.getCitizenCardId());
+        Optional<Order> filteredOrder = user.getOrders().stream()
+                .filter(c -> c.getTotalPrice()==completeRequestDTO.getAmount() && !c.isPaid())
+                .findFirst();
+        if (filteredOrder.isPresent()){
+            Order order = filteredOrder.get();
+            order.setPaid(true);
+            orderRepository.save(order);
+            return true;
+        }
+        return false;
     }
 }
