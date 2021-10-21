@@ -17,19 +17,12 @@ public class PaymentResponseController {
     @Autowired
     private UserService userService;
 
-    @GetMapping
-    public String test(){
-        return "Hello!";
-    }
-
     /**
      * receive response after payment is done in citizen account module
      */
     @PostMapping
-    public ResponseEntity<?> paymentResponse(@RequestBody CompleteRequestDTO completeRequestDTO){
-        if (orderService.paymentResponse(completeRequestDTO)){
-            return new ResponseEntity<>("Success!",HttpStatus.OK);
-        }
-        return  new ResponseEntity<>("Order doesn't exist!",HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> setPaid(@RequestBody CompleteRequestDTO completeRequestDTO){
+        orderService.setPaid(completeRequestDTO);
+        return new ResponseEntity<>(completeRequestDTO,HttpStatus.CREATED);
     }
 }
