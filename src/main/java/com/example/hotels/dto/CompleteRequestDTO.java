@@ -7,13 +7,13 @@ public class CompleteRequestDTO {
     private String message;
     private long citizenCardId;
     private String transactionId;
-    private double amount;
+    private long amount;
     private String success;
 
     public CompleteRequestDTO() {
     }
 
-    public CompleteRequestDTO(String message, long citizenCardId, String transactionId, double amount, String success) {
+    public CompleteRequestDTO(String message, long citizenCardId, String transactionId, long amount, String success) {
         this.message = message;
         this.citizenCardId = citizenCardId;
         this.transactionId = transactionId;
@@ -49,7 +49,7 @@ public class CompleteRequestDTO {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(long amount) {
         this.amount = amount;
     }
 
