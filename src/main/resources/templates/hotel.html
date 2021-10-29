@@ -21,7 +21,7 @@
             <img width="300" height="200" th:src="${hotel.getRoomImageLink}"/>
         </div>
 
-        <form th:action="'http://localhost:8080/cabinet/order/'+${hotel.getName}" style="margin-left:20px">
+        <form th:action="@{'/cabinet/order/'+${hotel.getName}}" style="margin-left:20px">
             <input type="submit" value="Create order" class="btn btn-success"/>
         </form>
 
