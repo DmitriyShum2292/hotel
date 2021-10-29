@@ -23,7 +23,7 @@
             <h2>You don't have a hotel yet</h2>
             <br>
             <br>
-            <form th:action="'http://localhost:8080/admin/hotel'" style="margin-left:5px">
+            <form th:action="@{/admin/hotel}" style="margin-left:5px">
                 <input type="submit" value="Create hotel" class="btn btn-success"/>
             </form>
 
@@ -51,7 +51,7 @@
                 <td th:text="${hotel.availableRooms}"></td>
                 <td>
                     <div class="container" style="display:flex;">
-                        <form th:action="'http://localhost:8080/hotel/'+${hotel.getId}" style="margin-left:5px">
+                        <form th:action="@{'/hotel/'+${hotel.getId}}" style="margin-left:5px">
                             <input type="submit" value="Hotel page" class="btn btn-primary"/>
                         </form>
 
