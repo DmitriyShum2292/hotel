@@ -88,7 +88,7 @@ public class Hotel {
         this.workingStatus = workingStatus;
     }
 
-    public double getDailyCost() {
+    public long getDailyCost() {
         return dailyCost;
     }
 
