@@ -2,6 +2,7 @@ package com.example.hotels.service.impl;
 
 
 import com.example.hotels.dto.ResidentReponseDTO;
+import com.example.hotels.exception.NotFoundException;
 import com.example.hotels.hmac.HMACUtil;
 import com.example.hotels.model.ExternalApiCredentials;
 import com.example.hotels.model.Order;
@@ -91,6 +92,11 @@ public class UserServiceImpl implements UserService {
         request.addHeader("sm-signature",signature);
         CloseableHttpResponse response = httpClient.execute(request);
         HttpEntity entity = response.getEntity();
+
+        if (response.getStatusLine().getStatusCode()!=200){
+            throw new NotFoundException
+                    ("This user is not active or does not exist and does not have the right to create a hotel");
+        }
 
         JSONObject obj = new JSONObject(EntityUtils.toString(entity));
         Gson gson = new Gson();

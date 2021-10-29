@@ -20,6 +20,7 @@ public class HotelRepositoryTest {
     public void init(){
         hotel = new Hotel();
         hotel.setName(name);
+        hotel.setCoordinates("123123");
         hotelRepository.save(hotel);
     }
     @AfterEach

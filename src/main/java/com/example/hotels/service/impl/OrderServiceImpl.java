@@ -10,10 +10,8 @@ import com.example.hotels.repository.OrderRepository;
 import com.example.hotels.service.ExternalApiService;
 import com.example.hotels.service.OrderService;
 import com.example.hotels.service.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.google.gson.Gson;
 import okhttp3.*;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -46,7 +44,7 @@ public class OrderServiceImpl implements OrderService {
     private HMACUtil hmacUtil;
     @Autowired
     private ExternalApiService externalApiService;
-    private OkHttpClient okHttpClient = new OkHttpClient();
+
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     @Value("citizen.account.baseurl")
@@ -61,6 +59,8 @@ public class OrderServiceImpl implements OrderService {
     private String CREATE_NEW_LEGAL_MAPPING;
     @Value("${citizen.account.notification.mapping}")
     private String NOTIFICATION_MAPPING;
+    @Value("${citizen.account.redirect.url}")
+    private String redirectUrl;
 
     public Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
@@ -84,7 +84,7 @@ public class OrderServiceImpl implements OrderService {
     public String pay(Order order) throws IOException {
         User user = userService.findCurrentUser();
         Payment payment = new Payment("HOTELS","order",order.getTotalPrice(),
-                user.getUserId(),"");
+                user.getUserId(),redirectUrl);
 
         logger.info(payment.toString());
 
@@ -127,23 +127,26 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public boolean sendNotification(Hotel hotel) throws IOException,JsonProcessingException {
-        String json = null;
-        Notification notification = new Notification(hotel.getCleaningTime(),hotel.toString());
+    public boolean sendNotification(Hotel hotel) throws IOException {
+        User user = userService.findCurrentUser();
+        NotificationDTO notificationDTO = new NotificationDTO(user.getUserId(),
+                hotel.getCleaningTime(),hotel.toString());
+
+        String url = NOTIFICATION_MAPPING;
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = ow.writeValueAsString(notificationDTO);
+        StringEntity entity = new StringEntity(json);
 
-        json = ow.writeValueAsString(notification);
+        CloseableHttpClient client = HttpClients.createDefault();
 
-        RequestBody body = RequestBody.create(JSON,json);
-        Request request = new Request.Builder()
-                .url(NOTIFICATION_MAPPING)
-                .post(body)
-                .build();
-        Response response = okHttpClient.newCall(request).execute();
+        HttpPost httpPost = new HttpPost(url);
+        httpPost.setHeader("Content-type", "application/json");
+        httpPost.addHeader(HttpHeaders.USER_AGENT, "Googlebot");
+        httpPost.setEntity(entity);
 
-        Notification responseNotification = new Gson().fromJson(response.body().string(),Notification.class);
+        CloseableHttpResponse response = client.execute(httpPost);
 
-        if (response.code()==200&&!responseNotification.getDescription().equals("Error")){
+        if (response.getStatusLine().getStatusCode()==200){
             return true;
         }
         return false;
@@ -166,7 +169,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void setPaid(CompleteRequestDTO completeRequestDTO) {
+    public void setPaid(CompleteRequestDTO completeRequestDTO) throws IOException {
         User user = userService.findByUserId(completeRequestDTO.getCitizenCardId());
         Optional<Order> filteredOrder = user.getOrders().stream()
                 .filter(c -> c.getTotalPrice()==completeRequestDTO.getAmount() && !c.isPaid())
@@ -175,6 +178,7 @@ public class OrderServiceImpl implements OrderService {
             Order order = filteredOrder.get();
             order.setPaid(true);
             orderRepository.save(order);
+            sendNotification(order.getHotel());
         }
         else {
             throw new NotFoundException("Order doesn't exist!");

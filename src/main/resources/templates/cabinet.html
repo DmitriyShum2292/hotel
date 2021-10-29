@@ -48,7 +48,7 @@
                                     <input type="submit" value="Pay" class="btn btn-success" />
                                 </form>
 
-                                <form th:action="@{/cabinet/order/delete/}+${el.getId}" method="GET" style="margin-left:5px;">
+                                <form th:action="@{'/cabinet/order/delete/'+${el.getId}}" method="GET" style="margin-left:5px;">
                                     <div><input type="submit" value="Delete order" class="btn btn-danger"/></div><br>
                                 </form>
                             </div>
@@ -121,11 +121,11 @@
                         <td th:text="${el.availableRooms}"></td>
                         <td>
                             <div class="container" style="display:flex;">
-                                <form th:action="'http://localhost:8080/cabinet/order/'+${el.getName}">
+                                <form th:action="@{'/cabinet/order/'+${el.getName}}">
                                      <input type="submit" value="Create order" class="btn btn-success"/>
                                 </form>
 
-                                <form th:action="'http://localhost:8080/hotel/'+${el.getId}" style="margin-left:5px">
+                                <form th:action="@{'/hotel/'+${el.getId}}" style="margin-left:5px">
                                         <input type="submit" value="Hotel page" class="btn btn-primary"/>
                                     </form>
 

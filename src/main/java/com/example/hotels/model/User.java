@@ -13,7 +13,7 @@ import java.util.Objects;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
     @NotNull(message = "Login can't be empty")
     @Size(min = 6,max = 12,message = "login must be 6 - 12 characters")

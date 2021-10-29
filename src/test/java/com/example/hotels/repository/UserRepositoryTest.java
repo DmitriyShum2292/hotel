@@ -21,6 +21,9 @@ public class UserRepositoryTest {
     public void init(){
         User user = new User();
         user.setLogin(login);
+        user.setFirstName("firstName");
+        user.setLastName("lastName");
+        user.setPassword("Password!");
         user.setUserId(1);
         userRepository.save(user);
         id = user.getId();
