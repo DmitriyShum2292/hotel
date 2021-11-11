@@ -42,7 +42,7 @@
                         <td th:text="${el.getTotalPrice}"></td>
                         <td th:text="${el.isPaid}"></td>
                         <td>
-                            <div style="display:flex;">
+                            <div th:unless="${el.isPaid}" style="display:flex;">
                                 <form th:action="@{/cabinet/pay}" th:method="POST">
                                     <input hidden type="number" th:value="${el.id}" name="id">
                                     <input type="submit" value="Pay" class="btn btn-success" />
