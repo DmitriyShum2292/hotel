@@ -32,20 +32,8 @@
         <br>
         <br>
         <form th:method="POST" th:action="@{/registration}"  th:object="${user}">
-            <label for="login">Enter login: </label>
-            <input type="text"  th:field="*{login}" name="login" id="login" required/>
-            <br>
-            <br>
-            <label for="firstName">Enter first name: </label>
-            <input type="text" th:field="*{firstName}" name="firstName" id="firstName" required/>
-            <br>
-            <br>
-            <label for="lastName">Enter last name: </label>
-            <input type="text" th:field="*{lastName}" name="lastName" id="lastName" required/>
-            <br>
-            <br>
-            <label for="phoneNumber" >Enter phone number: </label>
-            <input type="text"  th:field="*{phoneNumber}" name="phoneNumber" id="phoneNumber" required/>
+            <label for="nickName">Enter login: </label>
+            <input type="text"  th:field="*{nickName}" name="nickName" id="nickName" required/>
             <br>
             <br>
             <label for="password">Enter password: </label>
