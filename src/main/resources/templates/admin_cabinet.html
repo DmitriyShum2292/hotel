@@ -63,7 +63,7 @@
                             <input type="submit" value="Update" class="btn btn-success"/>
                         </form>
 
-                        <form th:method="DELETE" th:action="'/admin/hotel/'+${hotel.getId}" style="margin-left:5px">
+                        <form th:method="GET" th:action="'/admin/hotel/'+${hotel.getId}" style="margin-left:5px">
                             <input type="submit" value="Delete" class="btn btn-danger"/>
                         </form>
                     </div>
