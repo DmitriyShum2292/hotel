@@ -81,7 +81,7 @@ public class CabinetController {
 
     @PostMapping("/order")
     public String createOrder(@RequestParam String hotelName ,@RequestParam int period ,
-                              @RequestParam String booking){
+                              @RequestParam String booking) throws IOException {
         Hotel hotel = hotelService.findByName(hotelName);
         LocalDateTime dateTime = LocalDateTime.parse(booking);
         Order order = new Order(hotel, dateTime,period);
