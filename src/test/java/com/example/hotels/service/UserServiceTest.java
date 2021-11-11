@@ -5,8 +5,6 @@ import com.example.hotels.model.User;
 import com.example.hotels.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -31,7 +29,7 @@ class UserServiceTest {
         user = new User();
         user.setId(1);
         user.setUserId(1);
-        user.setLogin("Login");
+        user.setNickName("Login");
         user.setOrders(Arrays.asList(new Order()));
     }
 
@@ -42,9 +40,9 @@ class UserServiceTest {
 
     @Test
     void findByLogin() {
-        when(userRepository.findByLogin(user.getLogin())).thenReturn(user);
-        User testUser = userService.findByLogin(user.getLogin());
-        assertThat(testUser.getLogin().equals(user.getLogin()));
+        when(userRepository.findByNickName(user.getNickName())).thenReturn(user);
+        User testUser = userService.findByNickName(user.getNickName());
+        assertThat(testUser.getNickName().equals(user.getNickName()));
     }
 
     @Test

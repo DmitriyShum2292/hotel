@@ -21,11 +21,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
                 .usersByUsernameQuery(
-                        "select login, password, active from sys_user " +
-                                "where login=?")
+                        "select nick_name, password, active from sys_user " +
+                                "where nick_name=?")
                 .authoritiesByUsernameQuery(
-                        "select login, authority from sys_user " +
-                                "where login=?")
+                        "select nick_name, authority from sys_user " +
+                                "where nick_name=?")
                 .passwordEncoder(passwordEncoder);
     }
 

@@ -5,7 +5,6 @@ import com.example.hotels.model.User;
 import com.example.hotels.repository.OrderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -29,7 +28,7 @@ class OrderServiceTest {
     @BeforeEach
     public void init(){
         user = new User();
-        user.setLogin("Login");
+        user.setNickName("Login");
         order = new Order();
         order.setId(1);
         order.setPeriod(1);

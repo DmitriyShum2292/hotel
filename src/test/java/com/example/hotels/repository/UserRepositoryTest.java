@@ -14,15 +14,13 @@ public class UserRepositoryTest {
 
     @Autowired
     private  UserRepository userRepository;
-    private static final String login = "Dmitriy";
+    private static final String nickName = "Dmitriy";
     private static long id;
 
     @BeforeEach
     public void init(){
         User user = new User();
-        user.setLogin(login);
-        user.setFirstName("firstName");
-        user.setLastName("lastName");
+        user.setNickName(nickName);
         user.setPassword("Password!");
         user.setUserId(1);
         userRepository.save(user);
@@ -35,7 +33,7 @@ public class UserRepositoryTest {
 
     @Test
     public void saveAndFindByLoginUserTest(){
-        assertEquals(userRepository.findByLogin(login).getLogin(),login);
+        assertEquals(userRepository.findByNickName(nickName).getNickName(),nickName);
     }
     @Test
     public void findByUserId(){

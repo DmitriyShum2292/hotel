@@ -170,18 +170,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void setPaid(CompleteRequestDTO completeRequestDTO) throws IOException {
+        if (completeRequestDTO.getSuccess()){
         User user = userService.findByUserId(completeRequestDTO.getCitizenCardId());
         Optional<Order> filteredOrder = user.getOrders().stream()
-                .filter(c -> c.getTotalPrice()==completeRequestDTO.getAmount() && !c.isPaid())
+                .filter(c -> !c.isPaid())
                 .findFirst();
         if (filteredOrder.isPresent()){
             Order order = filteredOrder.get();
             order.setPaid(true);
             orderRepository.save(order);
-            sendNotification(order.getHotel());
         }
-        else {
-            throw new NotFoundException("Order doesn't exist!");
         }
     }
 }

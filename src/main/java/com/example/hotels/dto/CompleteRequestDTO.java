@@ -1,25 +1,14 @@
 package com.example.hotels.dto;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class CompleteRequestDTO {
 
     private String message;
     private long citizenCardId;
-    private String transactionId;
-    private long amount;
-    private String success;
-
-    public CompleteRequestDTO() {
-    }
-
-    public CompleteRequestDTO(String message, long citizenCardId, String transactionId, long amount, String success) {
-        this.message = message;
-        this.citizenCardId = citizenCardId;
-        this.transactionId = transactionId;
-        this.amount = amount;
-        this.success = success;
-    }
+    private UUID transactionId;
+    private Boolean success;
 
     public String getMessage() {
         return message;
@@ -37,27 +26,19 @@ public class CompleteRequestDTO {
         this.citizenCardId = citizenCardId;
     }
 
-    public String getTransactionId() {
+    public UUID getTransactionId() {
         return transactionId;
     }
 
-    public void setTransactionId(String transactionId) {
+    public void setTransactionId(UUID transactionId) {
         this.transactionId = transactionId;
     }
 
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(long amount) {
-        this.amount = amount;
-    }
-
-    public String getSuccess() {
+    public Boolean getSuccess() {
         return success;
     }
 
-    public void setSuccess(String success) {
+    public void setSuccess(Boolean success) {
         this.success = success;
     }
 
@@ -66,12 +47,12 @@ public class CompleteRequestDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CompleteRequestDTO that = (CompleteRequestDTO) o;
-        return citizenCardId == that.citizenCardId && Double.compare(that.amount, amount) == 0 && Objects.equals(message, that.message) && Objects.equals(transactionId, that.transactionId) && Objects.equals(success, that.success);
+        return citizenCardId == that.citizenCardId && Objects.equals(message, that.message) && Objects.equals(transactionId, that.transactionId) && Objects.equals(success, that.success);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(message, citizenCardId, transactionId, amount, success);
+        return Objects.hash(message, citizenCardId, transactionId, success);
     }
 
     @Override
@@ -79,9 +60,8 @@ public class CompleteRequestDTO {
         return "CompleteRequestDTO{" +
                 "message='" + message + '\'' +
                 ", citizenCardId=" + citizenCardId +
-                ", transactionId='" + transactionId + '\'' +
-                ", amount=" + amount +
-                ", success='" + success + '\'' +
+                ", transactionId=" + transactionId +
+                ", success=" + success +
                 '}';
     }
 }

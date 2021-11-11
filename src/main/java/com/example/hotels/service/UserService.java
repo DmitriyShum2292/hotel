@@ -10,7 +10,7 @@ import java.util.List;
 public interface UserService {
 
     void save(User user);
-    User findByLogin(String login);
+    User findByNickName(String nickName);
     boolean citizenExist(User user) throws IOException;
     User findCurrentUser();
     List<Order> findOrdersByUser();

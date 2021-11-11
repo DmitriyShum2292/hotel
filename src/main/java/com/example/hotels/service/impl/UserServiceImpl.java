@@ -58,7 +58,6 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    @Transactional(rollbackOn = Exception.class)
     public void save(User user){
         try {
             if (citizenExist(user)){
@@ -112,15 +111,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByLogin(String login) {
-        return userRepository.findByLogin(login);
+    public User findByNickName(String nickName) {
+        return userRepository.findByNickName(nickName);
     }
 
     @Override
     public User findCurrentUser() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().
                 getAuthentication().getPrincipal();
-        User user = findByLogin(userDetails.getUsername());
+        User user = findByNickName(userDetails.getUsername());
         return user;
     }
 
