@@ -122,7 +122,7 @@ public class AdminController {
         hotelService.update(hotel);
         return redirectAdmin;
     }
-    @DeleteMapping("/hotel/{id}")
+    @GetMapping("/hotel/{id}")
     public String deleteHotel(@PathVariable long id){
         hotelService.delete(id);
         return redirectAdmin;
