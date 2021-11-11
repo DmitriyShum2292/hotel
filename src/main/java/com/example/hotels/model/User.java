@@ -17,16 +17,9 @@ public class User {
     private long id;
     @NotNull(message = "Login can't be empty")
     @Size(min = 6,max = 12,message = "login must be 6 - 12 characters")
-    private String login;
+    private String nickName;
     private String authority;
     private boolean active;
-    @NotNull(message = "First name should not be empty")
-    @Size(min = 2,max = 20,message = "First name should be 2 - 20 characters")
-    private String firstName;
-    @NotNull(message = "Last name should not be empty")
-    @Size(min = 2,max = 20,message = "Last name should be 2 - 20 characters")
-    private String lastName;
-    private String phoneNumber;
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Order> orders;
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
@@ -40,15 +33,15 @@ public class User {
     public User() {
     }
 
-    public User(String login,String authority, boolean active, String firstName, String lastName,
-                String phoneNumber, List<Order> orders) {
-        this.login = login;
+    public User(String nickName, String authority, boolean active, List<Order> orders,
+                Hotel hotel, String password, long userId) {
+        this.nickName = nickName;
         this.authority = authority;
         this.active = active;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
         this.orders = orders;
+        this.hotel = hotel;
+        this.password = password;
+        this.userId = userId;
     }
 
     public long getId() {
@@ -59,12 +52,12 @@ public class User {
         this.id = id;
     }
 
-    public String getLogin() {
-        return login;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public String getAuthority() {
@@ -75,10 +68,6 @@ public class User {
         this.authority = authority;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public boolean isActive() {
         return active;
     }
@@ -87,36 +76,24 @@ public class User {
         this.active = active;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
     public List<Order> getOrders() {
         return orders;
     }
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
+    }
+
+    public Hotel getHotel() {
+        return hotel;
+    }
+
+    public void setHotel(Hotel hotel) {
+        this.hotel = hotel;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public void setPassword(String password) {
@@ -131,24 +108,30 @@ public class User {
         this.userId = userId;
     }
 
-    public Hotel getHotel() {
-        return hotel;
-    }
-
-    public void setHotel(Hotel hotel) {
-        this.hotel = hotel;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return userId == user.userId && Objects.equals(login, user.login) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(password, user.password);
+        return id == user.id && active == user.active && userId == user.userId && Objects.equals(nickName, user.nickName) && Objects.equals(authority, user.authority) && Objects.equals(orders, user.orders) && Objects.equals(hotel, user.hotel) && Objects.equals(password, user.password);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(login, firstName, lastName, password, userId);
+        return Objects.hash(id, nickName, authority, active, orders, hotel, password, userId);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", login='" + nickName + '\'' +
+                ", authority='" + authority + '\'' +
+                ", active=" + active +
+                ", orders=" + orders +
+                ", hotel=" + hotel +
+                ", password='" + password + '\'' +
+                ", userId=" + userId +
+                '}';
     }
 }
