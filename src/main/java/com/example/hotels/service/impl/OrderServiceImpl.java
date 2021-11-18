@@ -94,7 +94,7 @@ public class OrderServiceImpl implements OrderService {
         String signature = hmacUtil.calculateHash(keyId,timestamp,"action",secretKey);
 
 
-        String url = "http://ec2-34-224-3-79.compute-1.amazonaws.com/api/v1/payment/pay-url";
+        String url = "http://54.236.248.165/api/v1/payment/pay-url";
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = ow.writeValueAsString(payment);
         StringEntity entity = new StringEntity(json);
