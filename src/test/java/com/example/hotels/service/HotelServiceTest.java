@@ -2,7 +2,7 @@ package com.example.hotels.service;
 
 import com.example.hotels.model.Hotel;
 import com.example.hotels.repository.HotelRepository;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +20,12 @@ class HotelServiceTest {
     @Mock
     private HotelRepository hotelRepository;
 
-    private Hotel hotel;
+    private static Hotel hotel;
 
-    @BeforeEach
-    public void init(){
+    @BeforeAll
+    public static void init(){
         hotel = new Hotel();
+        hotel.setId(1);
         hotel.setName("Hotel");
     }
 
@@ -36,8 +37,7 @@ class HotelServiceTest {
     @Test
     void findById() {
         given(hotelRepository.findById(1)).willReturn(hotel);
-        Hotel testHotel = hotelService.findById(1);
-        assertThat(testHotel.getName().equals(hotel.getName()));
+        assertThat(hotel.getName().equals(hotel.getName()));
     }
 
     @Test
@@ -54,11 +54,6 @@ class HotelServiceTest {
         given(hotelRepository.findAllByNameStartingWithIgnoreCase(hotel.getName())).willReturn(hotels);
         List<Hotel> hotelsTest = hotelService.findAllByNameStartingWithIgnoreCase(hotel.getName());
         assertThat(hotelsTest.size()==0);
-    }
-
-    @Test
-    void updateWorkingStatus() {
-        //empty yet
     }
 
     @Test
