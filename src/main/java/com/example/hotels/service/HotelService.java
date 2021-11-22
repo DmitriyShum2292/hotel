@@ -13,7 +13,8 @@ import java.util.List;
 
 @Component
 public interface HotelService {
-    void save(Hotel hotel) throws IOException;
+    void save(Hotel hotel);
+    void saveWithVerification(Hotel hotel) throws IOException;
     void update(Hotel hotel);
     Hotel findById(long id);
     Hotel findByName(String name);

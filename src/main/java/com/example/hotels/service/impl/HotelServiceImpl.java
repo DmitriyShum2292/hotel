@@ -71,9 +71,13 @@ public class HotelServiceImpl implements HotelService {
 
     public Logger logger = LoggerFactory.getLogger(HotelServiceImpl.class);
 
+    @Override
+    public void save(Hotel hotel){
+     hotelRepository.save(hotel);
+    }
 
     @Override
-    public void save(Hotel hotel) throws IOException {
+    public void saveWithVerification(Hotel hotel) throws IOException {
         if(saveLegalEntityInCityManagement(hotel.getHomeId(),hotel)) {
             hotelRepository.save(hotel);
         }
@@ -226,7 +230,7 @@ public class HotelServiceImpl implements HotelService {
 
         JSONObject obj = new JSONObject(EntityUtils.toString(entity));
 
-        List<BuildingInfoDTO>buildingInfoDTOS = new ArrayList<>();
+        List<BuildingInfoDTO>buildingInfoDTOS;
         Gson gson = new Gson();
         try {
             buildingInfoDTOS = gson.fromJson(obj.getJSONArray("result").toString(),
