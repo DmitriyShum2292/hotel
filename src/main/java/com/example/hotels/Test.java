@@ -10,7 +10,7 @@ public class Test {
 
         String data = String.valueOf(new Date().getTime()+300000);
 
-        String hash = hmacUtil.calculateHash("HOTELS",data,"action","hotelKey");
+        String hash = hmacUtil.calculateHash("CITY_MANAGEMENT",data,"action","cityManagementKey");
         System.out.println(hash);
         System.out.println(String.valueOf(data));
 

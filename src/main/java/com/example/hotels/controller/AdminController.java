@@ -105,7 +105,7 @@ public class AdminController {
             return "create_hotel";
         }
         User user = userService.findCurrentUser();
-        hotelService.save(hotel);
+        hotelService.saveWithVerification(hotel);
         user.setHotel(hotel);
         userService.save(user);
         return redirectAdmin;
