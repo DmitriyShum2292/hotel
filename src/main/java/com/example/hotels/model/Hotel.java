@@ -37,14 +37,13 @@ public class Hotel {
     }
 
     public Hotel(String name, int stars, int availableRooms, boolean workingStatus,
-                 long dailyCost, LocalTime cleaningTime, String coordinates,long homeId) {
+                 long dailyCost, LocalTime cleaningTime, long homeId) {
         this.name = name;
         this.stars = stars;
         this.availableRooms = availableRooms;
         this.workingStatus = workingStatus;
         this.dailyCost = dailyCost;
         this.cleaningTime = cleaningTime;
-        this.coordinates = coordinates;
         this.homeId = homeId;
     }
 
