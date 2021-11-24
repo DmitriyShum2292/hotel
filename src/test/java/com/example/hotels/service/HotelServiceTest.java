@@ -142,6 +142,9 @@ class HotelServiceTest {
 
         assertThat(response.getStatusLine().getStatusCode()==200);
         assertThat(streets.size()>0);
+
+        response.close();
+        httpClient.close();
     }
 
     @Test
@@ -167,6 +170,9 @@ class HotelServiceTest {
 
         assertThat(response.getStatusLine().getStatusCode()==200);
         assertThat(buildings.size()>0);
+
+        response.close();
+        httpClient.close();
     }
 
     @Test
