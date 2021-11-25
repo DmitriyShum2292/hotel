@@ -57,19 +57,21 @@ public class HotelServiceImpl implements HotelService {
     @Value("${hotels.keyid}")
     private String keyId;
     @Value("${city.management.baseurl}")
-    private String BASE_URL;
+    private String baseUrl;
     @Value("${city.management.districts.mapping}")
-    private String DISTRICTS_MAPPING;
+    private String districtsMapping;
     @Value("${city.management.streets.mapping}")
-    private String STREET_MAPPING;
+    private String streetMapping;
     @Value("${city.management.commercial.mapping}")
-    private String COMMERCIAL_MAPPING;
+    private String commercialMapping;
     @Value("${city.management.homeid.mapping}")
-    private String HOME_ID_MAPPING;
+    private String homeIdMapping;
     @Value("${city.management.legalentity.create.mapping}")
-    private String LEGAL_ENTITY_CREATE_MAPPING;
+    private String legalEntityCreateMapping;
+    private static final String USER_AGENT = "Googlebot";
+    private static final String RESULT = "result";
 
-    public Logger logger = LoggerFactory.getLogger(HotelServiceImpl.class);
+    public static final Logger logger = LoggerFactory.getLogger(HotelServiceImpl.class);
 
     @Override
     public void save(Hotel hotel){
@@ -124,29 +126,26 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public List<DistrictDTO> getAllDistricts() throws IOException {
         HttpUrl.Builder urlBuilder
-                = HttpUrl.parse(BASE_URL + DISTRICTS_MAPPING).newBuilder();
+                = HttpUrl.parse(baseUrl + districtsMapping).newBuilder();
         String url = urlBuilder.build().toString();
-
-        CloseableHttpClient httpClient = HttpClients.createDefault();
-
-        HttpGet request = new HttpGet(url);
-        request.addHeader(HttpHeaders.USER_AGENT, "Googlebot");
-
-        CloseableHttpResponse response = httpClient.execute(request);
-        HttpEntity entity = response.getEntity();
+        CloseableHttpResponse response;
+        HttpEntity entity;
+        try(CloseableHttpClient httpClient = HttpClients.createDefault()){
+            HttpGet request = new HttpGet(url);
+            request.addHeader(HttpHeaders.USER_AGENT, USER_AGENT);
+            response = httpClient.execute(request);
+            entity = response.getEntity();
+        }
 
         JSONObject obj = new JSONObject(EntityUtils.toString(entity));
 
         Gson gson = new Gson();
-        List<DistrictDTO> districtDTOS = new ArrayList<>();
-        districtDTOS = gson.fromJson(obj.getJSONArray("result").toString(),
+        List<DistrictDTO> districtDTOS;
+        districtDTOS = gson.fromJson(obj.getJSONArray(RESULT).toString(),
                 new TypeToken<List<DistrictDTO>>(){}.getType());
         if (response.getStatusLine().getStatusCode()==200) {
-
             return districtDTOS;
         }
-        response.close();
-        httpClient.close();
         return new ArrayList<>();
     }
     /**
@@ -155,29 +154,24 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public List<StreetDTO> getAllStreetsByDistrict(long districtId) throws IOException {
         HttpUrl.Builder urlBuilder
-                = HttpUrl.parse(BASE_URL + STREET_MAPPING+"?districtId="+districtId).newBuilder();
+                = HttpUrl.parse(baseUrl + streetMapping +"?districtId="+districtId).newBuilder();
         String url = urlBuilder.build().toString();
-
-        CloseableHttpClient httpClient = HttpClients.createDefault();
-
-        HttpGet request = new HttpGet(url);
-        request.addHeader(HttpHeaders.USER_AGENT, "Googlebot");
-
-
-        CloseableHttpResponse response = httpClient.execute(request);
-        HttpEntity entity = response.getEntity();
-
+        CloseableHttpResponse response;
+        HttpEntity entity;
+        try(CloseableHttpClient httpClient = HttpClients.createDefault()) {
+            HttpGet request = new HttpGet(url);
+            request.addHeader(HttpHeaders.USER_AGENT, USER_AGENT);
+            response = httpClient.execute(request);
+            entity = response.getEntity();
+        }
         JSONObject obj = new JSONObject(EntityUtils.toString(entity));
 
         Gson gson = new Gson();
-        List<StreetDTO> streets = gson.fromJson(obj.getJSONArray("result").toString(),
+        List<StreetDTO> streets = gson.fromJson(obj.getJSONArray(RESULT).toString(),
                 new TypeToken<List<StreetDTO>>(){}.getType());
         if (response.getStatusLine().getStatusCode()==200) {
-
             return streets;
         }
-        response.close();
-        httpClient.close();
         return new ArrayList<>();
     }
     /**
@@ -186,29 +180,24 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public List<CommercialBuildingDTO> getAllCommercialBuildingByStreet(long streetId) throws IOException {
         HttpUrl.Builder urlBuilder
-                = HttpUrl.parse(BASE_URL + COMMERCIAL_MAPPING+"?streetId="+streetId).newBuilder();
+                = HttpUrl.parse(baseUrl + commercialMapping +"?streetId="+streetId).newBuilder();
         String url = urlBuilder.build().toString();
-
-        CloseableHttpClient httpClient = HttpClients.createDefault();
-
-        HttpGet request = new HttpGet(url);
-        request.addHeader(HttpHeaders.USER_AGENT, "Googlebot");
-
-
-        CloseableHttpResponse response = httpClient.execute(request);
-        HttpEntity entity = response.getEntity();
-
+        CloseableHttpResponse response;
+        HttpEntity entity;
+        try(CloseableHttpClient httpClient = HttpClients.createDefault()) {
+            HttpGet request = new HttpGet(url);
+            request.addHeader(HttpHeaders.USER_AGENT, USER_AGENT);
+            response = httpClient.execute(request);
+            entity = response.getEntity();
+        }
         JSONObject obj = new JSONObject(EntityUtils.toString(entity));
 
         Gson gson = new Gson();
-        List<CommercialBuildingDTO> buildings = gson.fromJson(obj.getJSONArray("result").toString(),
+        List<CommercialBuildingDTO> buildings = gson.fromJson(obj.getJSONArray(RESULT).toString(),
                 new TypeToken<List<CommercialBuildingDTO>>(){}.getType());
         if (response.getStatusLine().getStatusCode()==200) {
-
             return buildings;
         }
-        response.close();
-        httpClient.close();
         return new ArrayList<>();
     }
     /**
@@ -217,36 +206,30 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public List<BuildingInfoDTO> getAllBuildingInfoByCommercialBuilding(long commercialBuildingId) throws IOException {
         HttpUrl.Builder urlBuilder
-                = HttpUrl.parse(BASE_URL + HOME_ID_MAPPING+"?buildingId="+commercialBuildingId).newBuilder();
+                = HttpUrl.parse(baseUrl + homeIdMapping +"?buildingId="+commercialBuildingId).newBuilder();
         String url = urlBuilder.build().toString();
-        System.out.println("***"+url);
-        CloseableHttpClient httpClient = HttpClients.createDefault();
-
-        HttpGet request = new HttpGet(url);
-        request.addHeader(HttpHeaders.USER_AGENT, "Googlebot");
-
-        CloseableHttpResponse response = httpClient.execute(request);
-        HttpEntity entity = response.getEntity();
-
+        HttpEntity entity;
+        CloseableHttpResponse response;
+        try(CloseableHttpClient httpClient = HttpClients.createDefault()) {
+            HttpGet request = new HttpGet(url);
+            request.addHeader(HttpHeaders.USER_AGENT, USER_AGENT);
+            response = httpClient.execute(request);
+            entity = response.getEntity();
+        }
         JSONObject obj = new JSONObject(EntityUtils.toString(entity));
 
         List<BuildingInfoDTO>buildingInfoDTOS;
         Gson gson = new Gson();
         try {
-            buildingInfoDTOS = gson.fromJson(obj.getJSONArray("result").toString(),
+            buildingInfoDTOS = gson.fromJson(obj.getJSONArray(RESULT).toString(),
                     new TypeToken<List<BuildingInfoDTO>>(){}.getType());
         }
         catch (JSONException exception){
             throw new NotFoundException("Cannot create hotel in this building");
         }
-
-        System.out.println(buildingInfoDTOS);
         if (response.getStatusLine().getStatusCode()==200) {
-
             return buildingInfoDTOS;
         }
-        response.close();
-        httpClient.close();
         return new ArrayList<>();
     }
     /**
@@ -263,33 +246,31 @@ public class HotelServiceImpl implements HotelService {
         String signature = hmacUtil.calculateHash(keyId,timestamp,"action",secretKey);
 
         HttpUrl.Builder urlBuilder
-                = HttpUrl.parse(BASE_URL + LEGAL_ENTITY_CREATE_MAPPING).newBuilder();
+                = HttpUrl.parse(baseUrl + legalEntityCreateMapping).newBuilder();
         String url = urlBuilder.build().toString();
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = ow.writeValueAsString(newLegalEntityDTO);
         StringEntity entity = new StringEntity(json);
 
-        CloseableHttpClient client = HttpClients.createDefault();
+        try(CloseableHttpClient client = HttpClients.createDefault()) {
 
-        HttpPost httpPost = new HttpPost(url);
-        httpPost.setHeader("Content-type", "application/json");
-        httpPost.addHeader(HttpHeaders.USER_AGENT, "Googlebot");
-        httpPost.setEntity(entity);
-        httpPost.addHeader("sm-keyid",keyId);
-        httpPost.addHeader("sm-timestamp",timestamp);
-        httpPost.addHeader("sm-action","action");
-        httpPost.addHeader("sm-signature",signature);
-        httpPost.setEntity(entity);
+            HttpPost httpPost = new HttpPost(url);
+            httpPost.setHeader("Content-type", "application/json");
+            httpPost.addHeader(HttpHeaders.USER_AGENT, USER_AGENT);
+            httpPost.setEntity(entity);
+            httpPost.addHeader("sm-keyid", keyId);
+            httpPost.addHeader("sm-timestamp", timestamp);
+            httpPost.addHeader("sm-action", "action");
+            httpPost.addHeader("sm-signature", signature);
+            httpPost.setEntity(entity);
 
-        CloseableHttpResponse response = client.execute(httpPost);
-//        logger.info("******"+response.getStatusLine().getStatusCode());
-//        logger.info("******"+url);
-//        logger.info("******"+EntityUtils.toString(entity));
-//        logger.info("******"+response.toString());
-        if (response.getStatusLine().getStatusCode()==201){
-            return true;
+            CloseableHttpResponse response = client.execute(httpPost);
+            if (response.getStatusLine().getStatusCode() == 201) {
+                return true;
+            }
+            else {
+                return false;
+            }
         }
-        client.close();
-        return false;
     }
 }
