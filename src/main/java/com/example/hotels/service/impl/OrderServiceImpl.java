@@ -48,21 +48,21 @@ public class OrderServiceImpl implements OrderService {
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     @Value("citizen.account.baseurl")
-    private String BASE_URL;
+    private String baseUrl;
     @Value("${citizen.account.payment.mapping}")
-    private String PAYMENT_URL;
+    private String paymentUrl;
     @Value("${hotels.keyid}")
     private String keyId;
     @Value("${citizen.account.action}")
     private String action;
     @Value("${city.management.legalentity.create.mapping}")
-    private String CREATE_NEW_LEGAL_MAPPING;
+    private String createNewLegalMapping;
     @Value("${citizen.account.notification.mapping}")
-    private String NOTIFICATION_MAPPING;
+    private String notificationMapping;
     @Value("${citizen.account.redirect.url}")
     private String redirectUrl;
 
-    public Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
+    private Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     @Override
     public void save(Order order) {
@@ -86,8 +86,6 @@ public class OrderServiceImpl implements OrderService {
         Payment payment = new Payment("HOTELS","order",order.getTotalPrice(),
                 user.getUserId(),redirectUrl);
 
-        logger.info(payment.toString());
-
         long now = new Date().getTime()+30000000;
         String timestamp = String.valueOf(now);
         String secretKey = externalApiService.findByKeyId(keyId).getValue();
@@ -99,31 +97,31 @@ public class OrderServiceImpl implements OrderService {
         String json = ow.writeValueAsString(payment);
         StringEntity entity = new StringEntity(json);
 
-        logger.info("******"+url);
-        CloseableHttpClient client = HttpClients.createDefault();
+        logger.info(url);
+        try(CloseableHttpClient client = HttpClients.createDefault()) {
 
-        HttpPost httpPost = new HttpPost(url);
-        httpPost.setHeader("Content-type", "application/json");
-        httpPost.addHeader(HttpHeaders.USER_AGENT, "Googlebot");
-        httpPost.setEntity(entity);
-        httpPost.addHeader("sm-keyid",keyId);
-        httpPost.addHeader("sm-timestamp",timestamp);
-        httpPost.addHeader("sm-action","action");
-        httpPost.addHeader("sm-signature",signature);
-        httpPost.setEntity(entity);
-        CloseableHttpResponse response = client.execute(httpPost);
+            HttpPost httpPost = new HttpPost(url);
+            httpPost.setHeader("Content-type", "application/json");
+            httpPost.addHeader(HttpHeaders.USER_AGENT, "Googlebot");
+            httpPost.setEntity(entity);
+            httpPost.addHeader("sm-keyid", keyId);
+            httpPost.addHeader("sm-timestamp", timestamp);
+            httpPost.addHeader("sm-action", "action");
+            httpPost.addHeader("sm-signature", signature);
+            httpPost.setEntity(entity);
+            CloseableHttpResponse response = client.execute(httpPost);
 
-        String obj = new String(EntityUtils.toString(response.getEntity()));
+            String obj = EntityUtils.toString(response.getEntity());
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        PaymentUrlResponseDTO paymentUrlResponseDTO = objectMapper.readValue(obj,PaymentUrlResponseDTO.class);
-        logger.info(obj);
-        response.close();
-        client.close();
-        if (paymentUrlResponseDTO!=null){
-            return paymentUrlResponseDTO.getObject();
+            ObjectMapper objectMapper = new ObjectMapper();
+            PaymentUrlResponseDTO paymentUrlResponseDTO = objectMapper.readValue(obj, PaymentUrlResponseDTO.class);
+            logger.info(obj);
+            response.close();
+            if (paymentUrlResponseDTO != null) {
+                return paymentUrlResponseDTO.getObject();
+            }
+            throw new NotFoundException("User with citizen card number: " + user.getUserId() + " doesn't exist");
         }
-        throw new NotFoundException("User with citizen card number: "+user.getUserId()+" doesn't exist");
     }
 
     @Override
@@ -132,24 +130,27 @@ public class OrderServiceImpl implements OrderService {
         NotificationDTO notificationDTO = new NotificationDTO(user.getUserId(),
                 hotel.getCleaningTime(),hotel.toString());
 
-        String url = NOTIFICATION_MAPPING;
+        String url = notificationMapping;
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = ow.writeValueAsString(notificationDTO);
         StringEntity entity = new StringEntity(json);
 
-        CloseableHttpClient client = HttpClients.createDefault();
+        try(CloseableHttpClient client = HttpClients.createDefault()) {
 
-        HttpPost httpPost = new HttpPost(url);
-        httpPost.setHeader("Content-type", "application/json");
-        httpPost.addHeader(HttpHeaders.USER_AGENT, "Googlebot");
-        httpPost.setEntity(entity);
+            HttpPost httpPost = new HttpPost(url);
+            httpPost.setHeader("Content-type", "application/json");
+            httpPost.addHeader(HttpHeaders.USER_AGENT, "Googlebot");
+            httpPost.setEntity(entity);
 
-        CloseableHttpResponse response = client.execute(httpPost);
+            CloseableHttpResponse response = client.execute(httpPost);
 
-        if (response.getStatusLine().getStatusCode()==200){
-            return true;
+            if (response.getStatusLine().getStatusCode() == 200) {
+                return true;
+            }
+            else {
+                return false;
+            }
         }
-        return false;
     }
 
     @Override
