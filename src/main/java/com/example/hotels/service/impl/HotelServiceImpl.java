@@ -130,23 +130,24 @@ public class HotelServiceImpl implements HotelService {
         String url = urlBuilder.build().toString();
         CloseableHttpResponse response;
         HttpEntity entity;
-        try(CloseableHttpClient httpClient = HttpClients.createDefault()){
+        try(CloseableHttpClient httpClient = HttpClients.createDefault()) {
             HttpGet request = new HttpGet(url);
             request.addHeader(HttpHeaders.USER_AGENT, USER_AGENT);
             response = httpClient.execute(request);
             entity = response.getEntity();
-        }
 
-        JSONObject obj = new JSONObject(EntityUtils.toString(entity));
+            JSONObject obj = new JSONObject(EntityUtils.toString(entity));
 
-        Gson gson = new Gson();
-        List<DistrictDTO> districtDTOS;
-        districtDTOS = gson.fromJson(obj.getJSONArray(RESULT).toString(),
-                new TypeToken<List<DistrictDTO>>(){}.getType());
-        if (response.getStatusLine().getStatusCode()==200) {
-            return districtDTOS;
+            Gson gson = new Gson();
+            List<DistrictDTO> districtDTOS;
+            districtDTOS = gson.fromJson(obj.getJSONArray(RESULT).toString(),
+                    new TypeToken<List<DistrictDTO>>() {
+                    }.getType());
+            if (response.getStatusLine().getStatusCode() == 200) {
+                return districtDTOS;
+            }
+            return new ArrayList<>();
         }
-        return new ArrayList<>();
     }
     /**
      * http request to city management for get streets by district
@@ -163,16 +164,18 @@ public class HotelServiceImpl implements HotelService {
             request.addHeader(HttpHeaders.USER_AGENT, USER_AGENT);
             response = httpClient.execute(request);
             entity = response.getEntity();
-        }
-        JSONObject obj = new JSONObject(EntityUtils.toString(entity));
 
-        Gson gson = new Gson();
-        List<StreetDTO> streets = gson.fromJson(obj.getJSONArray(RESULT).toString(),
-                new TypeToken<List<StreetDTO>>(){}.getType());
-        if (response.getStatusLine().getStatusCode()==200) {
-            return streets;
+            JSONObject obj = new JSONObject(EntityUtils.toString(entity));
+
+            Gson gson = new Gson();
+            List<StreetDTO> streets = gson.fromJson(obj.getJSONArray(RESULT).toString(),
+                    new TypeToken<List<StreetDTO>>() {
+                    }.getType());
+            if (response.getStatusLine().getStatusCode() == 200) {
+                return streets;
+            }
+            return new ArrayList<>();
         }
-        return new ArrayList<>();
     }
     /**
      * http request to city management for get buildings by street
@@ -189,16 +192,18 @@ public class HotelServiceImpl implements HotelService {
             request.addHeader(HttpHeaders.USER_AGENT, USER_AGENT);
             response = httpClient.execute(request);
             entity = response.getEntity();
-        }
-        JSONObject obj = new JSONObject(EntityUtils.toString(entity));
 
-        Gson gson = new Gson();
-        List<CommercialBuildingDTO> buildings = gson.fromJson(obj.getJSONArray(RESULT).toString(),
-                new TypeToken<List<CommercialBuildingDTO>>(){}.getType());
-        if (response.getStatusLine().getStatusCode()==200) {
-            return buildings;
+            JSONObject obj = new JSONObject(EntityUtils.toString(entity));
+
+            Gson gson = new Gson();
+            List<CommercialBuildingDTO> buildings = gson.fromJson(obj.getJSONArray(RESULT).toString(),
+                    new TypeToken<List<CommercialBuildingDTO>>() {
+                    }.getType());
+            if (response.getStatusLine().getStatusCode() == 200) {
+                return buildings;
+            }
+            return new ArrayList<>();
         }
-        return new ArrayList<>();
     }
     /**
      * http request to city management for get offices and info by commercial building
@@ -215,22 +220,23 @@ public class HotelServiceImpl implements HotelService {
             request.addHeader(HttpHeaders.USER_AGENT, USER_AGENT);
             response = httpClient.execute(request);
             entity = response.getEntity();
-        }
-        JSONObject obj = new JSONObject(EntityUtils.toString(entity));
 
-        List<BuildingInfoDTO>buildingInfoDTOS;
-        Gson gson = new Gson();
-        try {
-            buildingInfoDTOS = gson.fromJson(obj.getJSONArray(RESULT).toString(),
-                    new TypeToken<List<BuildingInfoDTO>>(){}.getType());
+            JSONObject obj = new JSONObject(EntityUtils.toString(entity));
+
+            List<BuildingInfoDTO> buildingInfoDTOS;
+            Gson gson = new Gson();
+            try {
+                buildingInfoDTOS = gson.fromJson(obj.getJSONArray(RESULT).toString(),
+                        new TypeToken<List<BuildingInfoDTO>>() {
+                        }.getType());
+            } catch (JSONException exception) {
+                throw new NotFoundException("Cannot create hotel in this building");
+            }
+            if (response.getStatusLine().getStatusCode() == 200) {
+                return buildingInfoDTOS;
+            }
+            return new ArrayList<>();
         }
-        catch (JSONException exception){
-            throw new NotFoundException("Cannot create hotel in this building");
-        }
-        if (response.getStatusLine().getStatusCode()==200) {
-            return buildingInfoDTOS;
-        }
-        return new ArrayList<>();
     }
     /**
      * http post request with HMAC headers to city management for save new legal entity and set owner
