@@ -10,8 +10,6 @@ import com.example.hotels.model.User;
 import com.example.hotels.service.HotelService;
 import com.example.hotels.service.OrderService;
 import com.example.hotels.service.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,17 +30,15 @@ public class AdminController {
     @Autowired
     private OrderService orderService;
 
-    public Logger logger = LoggerFactory.getLogger(MainController.class);
-
-
-    private final  String hotelName = "hotel";
-    private final String redirectAdmin = "redirect:/admin";
+    private static final  String HOTEL_NAME = "hotel";
+    private static final String REDIRECT_ADMIN = "redirect:/admin";
+    private static final String CREATE_HOTEL = "create_hotel";
 
     @GetMapping
     public String adminPage(Model model){
         User user = userService.findCurrentUser();
         model.addAttribute("user", user);
-        model.addAttribute(hotelName, user.getHotel());
+        model.addAttribute(HOTEL_NAME, user.getHotel());
         return "admin_cabinet";
     }
     @GetMapping("/hotel")
@@ -85,15 +81,15 @@ public class AdminController {
 
             Hotel hotel = new Hotel();
             model.addAttribute("user", user);
-            model.addAttribute(hotelName, hotel);
+            model.addAttribute(HOTEL_NAME, hotel);
 
-            return "create_hotel";
+            return CREATE_HOTEL;
         }
         Hotel hotel = new Hotel();
 
-        model.addAttribute(hotelName, hotel);
+        model.addAttribute(HOTEL_NAME, hotel);
 
-        return "create_hotel";
+        return CREATE_HOTEL;
     }
     @PostMapping("/hotel")
     public String createHotel(@ModelAttribute("hotel") @Valid Hotel hotel, BindingResult bindingResult,
@@ -102,29 +98,29 @@ public class AdminController {
             model.addAttribute("error",bindingResult.getFieldErrors());
             User user = userService.findCurrentUser();
             model.addAttribute("user", user);
-            return "create_hotel";
+            return CREATE_HOTEL;
         }
         User user = userService.findCurrentUser();
         hotelService.saveWithVerification(hotel);
         user.setHotel(hotel);
         userService.save(user);
-        return redirectAdmin;
+        return REDIRECT_ADMIN;
     }
     @GetMapping("/hotel/update")
     public String updateHotelPage(Model model){
         User user = userService.findCurrentUser();
         model.addAttribute("user", user);
-        model.addAttribute(hotelName, user.getHotel());
+        model.addAttribute(HOTEL_NAME, user.getHotel());
         return "update_hotel";
     }
     @PostMapping("/hotel/update")
     public String updateHotel(@ModelAttribute("hotel")Hotel hotel){
         hotelService.update(hotel);
-        return redirectAdmin;
+        return REDIRECT_ADMIN;
     }
     @GetMapping("/hotel/{id}")
     public String deleteHotel(@PathVariable long id){
         hotelService.delete(id);
-        return redirectAdmin;
+        return REDIRECT_ADMIN;
     }
 }

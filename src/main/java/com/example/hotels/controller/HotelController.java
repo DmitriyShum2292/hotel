@@ -22,7 +22,7 @@ public class HotelController {
     private UserService userService;
 
     @GetMapping("/{id}")
-    public String HotelPage(@PathVariable long id, Model model){
+    public String hotelPage(@PathVariable long id, Model model){
         Hotel hotel = hotelService.findById(id);
         User user = userService.findCurrentUser();
         model.addAttribute("hotel", hotel);

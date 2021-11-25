@@ -29,8 +29,8 @@ public class CabinetController {
     @Autowired
     private UserService userService;
 
-    private final String hotels = "hotels";
-    private final String redirectCab = "redirect:/cabinet";
+    private static final String HOTELS = "hotels";
+    private static final String REDIRECT_CAB = "redirect:/cabinet";
 
     @GetMapping
     public String cabinet(@RequestParam(required = false,defaultValue = "0") int page,
@@ -39,12 +39,12 @@ public class CabinetController {
                           @RequestParam(required = false, defaultValue = "name") String sort, Model model){
         User user = userService.findCurrentUser();
         if(!name.equals("0")) {
-            model.addAttribute(hotels, hotelService.findAllByNameStartingWithIgnoreCase(name));
+            model.addAttribute(HOTELS, hotelService.findAllByNameStartingWithIgnoreCase(name));
         }
         else {
             Page<Hotel> all = hotelService.findAll(page,size,sort);
             if (all.isEmpty()){throw new NotFoundException("No hotels found");}
-            model.addAttribute(hotels, hotelService.findAll(page, size, sort));
+            model.addAttribute(HOTELS, hotelService.findAll(page, size, sort));
         }
         model.addAttribute("user",user);
         model.addAttribute("orders",userService.findOrdersByUser());
@@ -61,7 +61,7 @@ public class CabinetController {
         Page<Hotel> all = hotelService.findAll(page,size,sort);
         if (all.isEmpty()){throw new NotFoundException("No hotels found");}
         model.addAttribute("user",user);
-        model.addAttribute("hotels",all);
+        model.addAttribute(HOTELS,all);
         model.addAttribute("orders",userService.findOrdersByUser());
         model.addAttribute("currentPage", page);
         model.addAttribute("size", size);
@@ -81,18 +81,18 @@ public class CabinetController {
 
     @PostMapping("/order")
     public String createOrder(@RequestParam String hotelName ,@RequestParam int period ,
-                              @RequestParam String booking) throws IOException {
+                              @RequestParam String booking) {
         Hotel hotel = hotelService.findByName(hotelName);
         LocalDateTime dateTime = LocalDateTime.parse(booking);
         Order order = new Order(hotel, dateTime,period);
         orderService.save(order);
-        return redirectCab;
+        return REDIRECT_CAB;
     }
 
     @GetMapping("/order/delete/{id}")
     public String deleteOrder(@PathVariable long id){
         orderService.delete(id);
-        return redirectCab;
+        return REDIRECT_CAB;
     }
 
     @PostMapping("/pay")
@@ -100,7 +100,7 @@ public class CabinetController {
         Order order = orderService.findById(id);
         if (order.isPaid()){
             RedirectView redirectView = new RedirectView();
-            redirectView.setUrl(redirectCab);
+            redirectView.setUrl(REDIRECT_CAB);
             return redirectView;
         }
         String url = orderService.pay(order);
