@@ -50,11 +50,11 @@ public class HotelWorkingStatusController {
     }
 
     @GetMapping("/test")
-    public ResponseEntity<?> test(ServletRequest request) throws ServletException, IOException {
+    public ResponseEntity<String> test(ServletRequest request) throws ServletException, IOException {
         if(hmacAuthFilter.doFilter(request)){
-            return new ResponseEntity<String>("Success!",HttpStatus.OK);
+            return new ResponseEntity<>("Success!",HttpStatus.OK);
         }
-        return new ResponseEntity<String>("Error!",HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>("Error!",HttpStatus.FORBIDDEN);
     }
 
 }

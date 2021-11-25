@@ -1,6 +1,5 @@
 package com.example.hotels.controller;
 
-import com.example.hotels.dto.Credentials;
 import com.example.hotels.model.User;
 import com.example.hotels.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

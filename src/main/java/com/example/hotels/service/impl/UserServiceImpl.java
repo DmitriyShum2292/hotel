@@ -21,8 +21,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.hibernate.LazyInitializationException;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -46,16 +44,13 @@ public class UserServiceImpl implements UserService {
     private ExternalApiService externalApiService;
 
     @Value("${city.management.baseurl}")
-    private String BASE_URL;
+    private String baseUrl;
     @Value("${city.management.resident.card.mapping}")
-    private String RESIDENT_CARD_URL;
+    private String residentCardUrl;
     @Value("${hotels.keyid}")
     private String keyId;
     @Value("${city.management.action.get}")
     private String action;
-
-    public Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-
 
     @Override
     public void save(User user){
@@ -78,36 +73,36 @@ public class UserServiceImpl implements UserService {
         String signature = hmacUtil.calculateHash(keyId,timestamp,action,externalApiCredentials.getValue());
 
         HttpUrl.Builder urlBuilder
-                = HttpUrl.parse(BASE_URL + RESIDENT_CARD_URL+user.getUserId()).newBuilder();
+                = HttpUrl.parse(baseUrl + residentCardUrl +user.getUserId()).newBuilder();
         String url = urlBuilder.build().toString();
 
-        CloseableHttpClient httpClient = HttpClients.createDefault();
+        try(CloseableHttpClient httpClient = HttpClients.createDefault()) {
 
-        HttpGet request = new HttpGet(url);
-        request.addHeader(HttpHeaders.USER_AGENT, "Googlebot");
-        request.addHeader("sm-keyid",keyId);
-        request.addHeader("sm-timestamp",timestamp);
-        request.addHeader("sm-action",action);
-        request.addHeader("sm-signature",signature);
-        CloseableHttpResponse response = httpClient.execute(request);
-        HttpEntity entity = response.getEntity();
+            HttpGet request = new HttpGet(url);
+            request.addHeader(HttpHeaders.USER_AGENT, "Googlebot");
+            request.addHeader("sm-keyid", keyId);
+            request.addHeader("sm-timestamp", timestamp);
+            request.addHeader("sm-action", action);
+            request.addHeader("sm-signature", signature);
+            CloseableHttpResponse response = httpClient.execute(request);
+            HttpEntity entity = response.getEntity();
 
-        if (response.getStatusLine().getStatusCode()!=200){
-            throw new NotFoundException
-                    ("This user is not active or does not exist and does not have the right to create a hotel");
+            if (response.getStatusLine().getStatusCode() != 200) {
+                throw new NotFoundException
+                        ("This user is not active or does not exist and does not have the right to create a hotel");
+            }
+
+            JSONObject obj = new JSONObject(EntityUtils.toString(entity));
+            Gson gson = new Gson();
+            ResidentReponseDTO residentReponseDTO = gson.fromJson(obj.getJSONObject("result").toString(), ResidentReponseDTO.class);
+
+            if (response.getStatusLine().getStatusCode() == 200 && residentReponseDTO.isActive()) {
+                return true;
+            }
+            else {
+                return false;
+            }
         }
-
-        JSONObject obj = new JSONObject(EntityUtils.toString(entity));
-        Gson gson = new Gson();
-        ResidentReponseDTO residentReponseDTO = gson.fromJson(obj.getJSONObject("result").toString(),ResidentReponseDTO.class);
-
-        if (response.getStatusLine().getStatusCode()==200&&residentReponseDTO.isActive()) {
-            logger.info(residentReponseDTO.toString()+"");
-            return true;
-        }
-        response.close();
-        httpClient.close();
-        return false;
     }
 
     @Override
