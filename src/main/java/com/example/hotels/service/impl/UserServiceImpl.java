@@ -62,6 +62,12 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public User findById(long id) {
+        return userRepository.findById(id);
+    }
+
     /**
      * http get request to city management for check exist user
      */
@@ -101,6 +107,45 @@ public class UserServiceImpl implements UserService {
             }
             else {
                 return false;
+            }
+        }
+    }
+
+    @Override
+    public ResidentReponseDTO getCitizenInfo(User user) throws IOException {
+        long now = new Date().getTime()+30000000;
+        String timestamp = String.valueOf(now);
+        ExternalApiCredentials externalApiCredentials = externalApiService.findByKeyId(keyId);
+        String signature = hmacUtil.calculateHash(keyId,timestamp,action,externalApiCredentials.getValue());
+
+        HttpUrl.Builder urlBuilder
+                = HttpUrl.parse(baseUrl + residentCardUrl +user.getUserId()).newBuilder();
+        String url = urlBuilder.build().toString();
+
+        try(CloseableHttpClient httpClient = HttpClients.createDefault()) {
+
+            HttpGet request = new HttpGet(url);
+            request.addHeader(HttpHeaders.USER_AGENT, "Googlebot");
+            request.addHeader("sm-keyid", keyId);
+            request.addHeader("sm-timestamp", timestamp);
+            request.addHeader("sm-action", action);
+            request.addHeader("sm-signature", signature);
+            CloseableHttpResponse response = httpClient.execute(request);
+            HttpEntity entity = response.getEntity();
+
+            if (response.getStatusLine().getStatusCode() != 200) {
+                throw new NotFoundException
+                        ("This user is not active or does not exist and does not have the right to create a hotel");
+            }
+
+            JSONObject obj = new JSONObject(EntityUtils.toString(entity));
+            Gson gson = new Gson();
+            ResidentReponseDTO residentReponseDTO = gson.fromJson(obj.getJSONObject("result").toString(), ResidentReponseDTO.class);
+
+            if (response.getStatusLine().getStatusCode() == 200 && residentReponseDTO.isActive()) {
+                return residentReponseDTO;
+            } else {
+                return new ResidentReponseDTO();
             }
         }
     }
