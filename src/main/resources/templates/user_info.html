@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
+  <title>User info</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet" />
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+</head>
+<body>
+  <div>
+    <div>
+      <header th:insert="fragments/header.html :: header" style="width: 100%"></header>
+    </div>
+  </div>
+
+  <div class="col-md-8">
+    <div class="card mb-3">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-3">
+            <h6 class="mb-0">Full Name</h6>
+          </div>
+          <div class="col-sm-9 text-secondary" th:text="${user_info.getFirstName+' '+user_info.getLastName}">
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-3">
+            <h6 class="mb-0">Citizen card number</h6>
+          </div>
+          <div class="col-sm-9 text-secondary" th:text="${user_info.getCardNumber}">
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-3">
+            <h6 class="mb-0">Address</h6>
+          </div>
+          <div class="col-sm-9 text-secondary" th:text="${user_info.getAddress}">
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-3">
+            <h6 class="mb-0">Active</h6>
+          </div>
+          <div class="col-sm-9 text-secondary" th:text="${user_info.isActive}">
+          </div>
+        </div>
+        <hr>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
