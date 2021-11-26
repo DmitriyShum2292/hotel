@@ -73,6 +73,49 @@
             </tbody>
         </table>
     </div>
+    <br/>
+    <hr>
+    <br/>
+    <div>
+        <h2>Orders for my hotel</h2>
+        <div style="margin-left:100px;">
+            <form th:action="@{''}" th:method="GET">
+                <p><input type="search" name="name" id="name" placeholder="Search by user nickname">
+                    <input type="submit" value="search"></p>
+            </form>
+        </div>
+        <table class="table" th:if="${user.getHotel!=null}">
+            <thead>
+            <tr>
+                <th>Creation date</th>
+                <th>Booking date</th>
+                <th>Period</th>
+                <th>Total price</th>
+                <th>Paid</th>
+                <th>User</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody th:each="el : ${orders}">
+            <tr>
+                <td th:text="${el.getCreationDate}"></td>
+                <td th:text="${el.getBookingDate}"></td>
+                <td th:text="${el.getPeriod}"></td>
+                <td th:text="${el.getTotalPrice}"></td>
+                <td th:text="${el.isPaid}"></td>
+                <td th:text="${el.getUser.getNickName}"></td>
+                <td>
+                    <div class="container" style="display:flex;">
+                        <form th:action="'/admin/user/'+${el.getUser.getId}" style="margin-left:5px">
+                            <input type="submit" value="Profile" class="btn btn-secondary"/>
+                        </form>
+                    </div>
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
 </body>
 </html>

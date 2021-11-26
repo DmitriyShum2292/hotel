@@ -16,6 +16,8 @@ public class Order {
     private long id;
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
     private Hotel hotel;
+    @OneToOne
+    private User user;
     private LocalDateTime creationDate;
     private LocalDateTime bookingDate;
     private int period;
@@ -49,6 +51,14 @@ public class Order {
         this.hotel = hotel;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public LocalDateTime getCreationDate() {
         return creationDate;
     }
@@ -73,7 +83,7 @@ public class Order {
         this.period = period;
     }
 
-    public double getTotalPrice() {
+    public long getTotalPrice() {
         return totalPrice;
     }
 
@@ -94,12 +104,12 @@ public class Order {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return id == order.id && period == order.period && Double.compare(order.totalPrice, totalPrice) == 0 && paid == order.paid && Objects.equals(hotel, order.hotel) && Objects.equals(creationDate, order.creationDate) && Objects.equals(bookingDate, order.bookingDate);
+        return id == order.id && period == order.period && totalPrice == order.totalPrice && paid == order.paid && Objects.equals(hotel, order.hotel) && Objects.equals(user, order.user) && Objects.equals(creationDate, order.creationDate) && Objects.equals(bookingDate, order.bookingDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, hotel, creationDate, bookingDate, period, totalPrice, paid);
+        return Objects.hash(id, hotel, user, creationDate, bookingDate, period, totalPrice, paid);
     }
 
     @Override
@@ -107,6 +117,7 @@ public class Order {
         return "Order{" +
                 "id=" + id +
                 ", hotel=" + hotel +
+                ", user=" + user +
                 ", creationDate=" + creationDate +
                 ", bookingDate=" + bookingDate +
                 ", period=" + period +
