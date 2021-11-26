@@ -68,6 +68,7 @@ public class OrderServiceImpl implements OrderService {
     public void save(Order order) {
         User user = userService.findCurrentUser();
         user.getOrders().add(order);
+        order.setUser(user);
         orderRepository.save(order);
         userService.save(user);
     }
@@ -75,6 +76,17 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order findById(long id) {
         return orderRepository.findById(id);
+    }
+
+    @Override
+    public List<Order> findAllByHotelAndUser(Hotel hotel, User user) {
+        return orderRepository.findAllByHotelAndUser(hotel,user);
+    }
+
+
+    @Override
+    public List<Order> findByHotel(Hotel hotel) {
+        return orderRepository.findByHotel(hotel);
     }
 
     /**
