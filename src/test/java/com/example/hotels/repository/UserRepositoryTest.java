@@ -23,7 +23,7 @@ public class UserRepositoryTest {
         user.setUserId(1);
         userRepository.save(user);
         id= user.getId();
-        assertEquals(userRepository.findById(id).get().getId(),id);
+        assertEquals(userRepository.findById(id).getId(),id);
         userRepository.delete(user);
     }
 
