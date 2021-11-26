@@ -6,6 +6,7 @@ import com.example.hotels.dto.DistrictDTO;
 import com.example.hotels.dto.StreetDTO;
 import com.example.hotels.exception.NotFoundException;
 import com.example.hotels.model.Hotel;
+import com.example.hotels.model.Order;
 import com.example.hotels.model.User;
 import com.example.hotels.service.HotelService;
 import com.example.hotels.service.OrderService;
@@ -17,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -33,10 +35,22 @@ public class AdminController {
     private static final  String HOTEL_NAME = "hotel";
     private static final String REDIRECT_ADMIN = "redirect:/admin";
     private static final String CREATE_HOTEL = "create_hotel";
+    private static final String ORDERS = "orders";
 
     @GetMapping
-    public String adminPage(Model model){
+    public String adminPage(@RequestParam(required = false,defaultValue = "0") String name, Model model){
         User user = userService.findCurrentUser();
+        if(!name.equals("0")){
+            User searchUser = userService.findByNickName(name);
+            if (searchUser==null){
+                model.addAttribute(ORDERS,new ArrayList<Order>());
+            }
+            model.addAttribute(ORDERS,orderService
+                    .findAllByHotelAndUser(user.getHotel(),searchUser));
+        }
+        else {
+            model.addAttribute(ORDERS,orderService.findByHotel(user.getHotel()));
+        }
         model.addAttribute("user", user);
         model.addAttribute(HOTEL_NAME, user.getHotel());
         return "admin_cabinet";
