@@ -1,7 +1,9 @@
 package com.example.hotels.exception;
 
 
+import com.example.hotels.service.UserService;
 import org.json.JSONException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -9,6 +11,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 @ControllerAdvice
 public class ApiExceptionHandler {
+
+    @Autowired
+    private UserService userService;
 
     private static final String EXC = "exception";
     private static final String STATUS = "status";
@@ -20,6 +25,7 @@ public class ApiExceptionHandler {
         mav.setViewName(EXC);
         mav.addObject(STATUS, HttpStatus.NOT_FOUND.toString());
         mav.addObject(EXC, e.getMessage());
+        mav.addObject("user",userService.findCurrentUser());
         return mav;
     }
     @ExceptionHandler(value = {ForbiddenException.class})
@@ -29,6 +35,7 @@ public class ApiExceptionHandler {
         mav.setViewName(EXC);
         mav.addObject(STATUS, HttpStatus.FORBIDDEN.toString());
         mav.addObject(EXC, e.getMessage());
+        mav.addObject("user",userService.findCurrentUser());
         return mav;
     }
     @ExceptionHandler(value = {JSONException.class})
@@ -38,6 +45,7 @@ public class ApiExceptionHandler {
         mav.setViewName(EXC);
         mav.addObject(STATUS, HttpStatus.INTERNAL_SERVER_ERROR.toString());
         mav.addObject(EXC, e.getMessage());
+        mav.addObject("user",userService.findCurrentUser());
         return mav;
     }
 }
