@@ -50,17 +50,17 @@ class HotelServiceTest {
     @Value("${hotels.keyid}")
     private String keyId;
     @Value("${city.management.baseurl}")
-    private String BASE_URL;
+    private String baseUrl;
     @Value("${city.management.districts.mapping}")
-    private String DISTRICTS_MAPPING;
+    private String districtsMapping;
     @Value("${city.management.streets.mapping}")
-    private String STREET_MAPPING;
+    private String streetMapping;
     @Value("${city.management.commercial.mapping}")
-    private String COMMERCIAL_MAPPING;
+    private String commercialMapping;
     @Value("${city.management.homeid.mapping}")
-    private String HOME_ID_MAPPING;
+    private String homeIdMapping;
     @Value("${city.management.legalentity.create.mapping}")
-    private String LEGAL_ENTITY_CREATE_MAPPING;
+    private String legalEntityCreateMapping;
 
     @BeforeAll
     public static void init(){
@@ -70,21 +70,18 @@ class HotelServiceTest {
     }
 
     @Test
-    void save() {
-        //void method
-    }
-
-    @Test
     void findById() {
         given(hotelRepository.findById(1)).willReturn(hotel);
-        assertThat(hotel.getName().equals(hotel.getName()));
+        boolean result = hotel.getName().equals(hotel.getName());
+        assertThat(result).isTrue();
     }
 
     @Test
     void findByName() {
         given(hotelRepository.findByName(hotel.getName())).willReturn(hotel);
         Hotel testHotel = hotelRepository.findByName(hotel.getName());
-        assertThat(testHotel.getName().equals(hotel.getName()));
+        boolean result = testHotel.getName().equals(hotel.getName());
+        assertThat(result).isTrue();
     }
 
     @Test
@@ -93,18 +90,14 @@ class HotelServiceTest {
         hotels.add(hotel);
         given(hotelRepository.findAllByNameStartingWithIgnoreCase(hotel.getName())).willReturn(hotels);
         List<Hotel> hotelsTest = hotelService.findAllByNameStartingWithIgnoreCase(hotel.getName());
-        assertThat(hotelsTest.size()==0);
-    }
-
-    @Test
-    void delete() {
-        //void method
+        boolean result = hotelsTest.size()==0;
+        assertThat(result).isTrue();
     }
 
     @Test
     void getAllDistricts() throws IOException, JSONException {
         HttpUrl.Builder urlBuilder
-                = HttpUrl.parse(BASE_URL + DISTRICTS_MAPPING).newBuilder();
+                = HttpUrl.parse(baseUrl + districtsMapping).newBuilder();
         String url = urlBuilder.build().toString();
 
         CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -116,13 +109,14 @@ class HotelServiceTest {
 
         response.close();
         httpClient.close();
-        assertThat(response.getStatusLine().getStatusCode()==200);
+        boolean result = response.getStatusLine().getStatusCode()==200;
+        assertThat(result).isTrue();
     }
 
     @Test
     void getAllStreetsByDistrict() throws JSONException, IOException {
         HttpUrl.Builder urlBuilder
-                = HttpUrl.parse(BASE_URL + STREET_MAPPING+"?districtId="+1).newBuilder();
+                = HttpUrl.parse(baseUrl + streetMapping +"?districtId="+1).newBuilder();
         String url = urlBuilder.build().toString();
 
         CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -140,8 +134,10 @@ class HotelServiceTest {
         List<StreetDTO> streets = gson.fromJson(obj.getJSONArray("result").toString(),
                 new TypeToken<List<StreetDTO>>(){}.getType());
 
-        assertThat(response.getStatusLine().getStatusCode()==200);
-        assertThat(streets.size()>0);
+        boolean result = response.getStatusLine().getStatusCode()==200;
+        boolean result1 = streets.size()>0;
+        assertThat(result).isTrue();
+        assertThat(result1).isTrue();
 
         response.close();
         httpClient.close();
@@ -150,7 +146,7 @@ class HotelServiceTest {
     @Test
     void getAllCommercialBuildingByStreet() throws JSONException, IOException {
         HttpUrl.Builder urlBuilder
-                = HttpUrl.parse(BASE_URL + COMMERCIAL_MAPPING+"?streetId="+1).newBuilder();
+                = HttpUrl.parse(baseUrl + commercialMapping +"?streetId="+1).newBuilder();
         String url = urlBuilder.build().toString();
 
         CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -168,8 +164,10 @@ class HotelServiceTest {
         List<CommercialBuildingDTO> buildings = gson.fromJson(obj.getJSONArray("result").toString(),
                 new TypeToken<List<CommercialBuildingDTO>>(){}.getType());
 
-        assertThat(response.getStatusLine().getStatusCode()==200);
-        assertThat(buildings.size()>0);
+        boolean result = response.getStatusLine().getStatusCode()==200;
+        boolean result1 = buildings.size()>0;
+        assertThat(result).isTrue();
+        assertThat(result1).isTrue();
 
         response.close();
         httpClient.close();
@@ -178,7 +176,7 @@ class HotelServiceTest {
     @Test
     void getAllBuildingInfoByCommercialBuilding() throws JSONException, IOException {
         HttpUrl.Builder urlBuilder
-                = HttpUrl.parse(BASE_URL + HOME_ID_MAPPING+"?buildingId="+1).newBuilder();
+                = HttpUrl.parse(baseUrl + homeIdMapping +"?buildingId="+1).newBuilder();
         String url = urlBuilder.build().toString();
 
         CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -199,6 +197,7 @@ class HotelServiceTest {
 
         response.close();
         httpClient.close();
-        assertThat(response.getStatusLine().getStatusCode()==200);
+        boolean result = response.getStatusLine().getStatusCode()==200;
+        assertThat(result).isTrue();
     }
 }
