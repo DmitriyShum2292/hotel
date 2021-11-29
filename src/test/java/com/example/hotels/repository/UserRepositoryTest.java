@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-public class UserRepositoryTest {
+class UserRepositoryTest {
 
     @Autowired
     private  UserRepository userRepository;
@@ -16,7 +16,7 @@ public class UserRepositoryTest {
 
 
     @Test
-    public void findByUserId(){
+    void findByUserId(){
         User user = new User();
         user.setNickName(nickName);
         user.setPassword("Password!");
