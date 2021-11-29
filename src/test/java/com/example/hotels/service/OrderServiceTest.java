@@ -46,17 +46,17 @@ class OrderServiceTest {
     private static Order order;
 
     @Value("citizen.account.baseurl")
-    private String BASE_URL;
+    private String baseUrl;
     @Value("${citizen.account.payment.mapping}")
-    private String PAYMENT_URL;
+    private String paymentUrl;
     @Value("${hotels.keyid}")
     private String keyId;
     @Value("${citizen.account.action}")
     private String action;
     @Value("${city.management.legalentity.create.mapping}")
-    private String CREATE_NEW_LEGAL_MAPPING;
+    private String createNewLegalMapping;
     @Value("${citizen.account.notification.mapping}")
-    private String NOTIFICATION_MAPPING;
+    private String notificationMapping;
     @Value("${citizen.account.redirect.url}")
     private String redirectUrl;
 
@@ -74,15 +74,11 @@ class OrderServiceTest {
     }
 
     @Test
-    void save() {
-        //void method
-    }
-
-    @Test
     void findById() {
         given(orderRepository.findById(1)).willReturn(order);
         Order orderTest = orderService.findById(1);
-        assertThat(orderTest.getId()==1);
+        boolean result = orderTest.getId()==1;
+        assertThat(result).isTrue();
     }
 
 
@@ -123,14 +119,9 @@ class OrderServiceTest {
 
             response.close();
 
-            assertThat(paymentUrlResponseDTO!=null);
+            boolean result = paymentUrlResponseDTO!=null;
+            assertThat(result).isTrue();
         }
     }
 
-
-
-    @Test
-    void delete() {
-        //void method
-    }
 }
