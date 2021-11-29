@@ -22,6 +22,7 @@ class ExternalApiServiceTest {
     void findByKeyId() {
         given(externalApiRepository.findByKeyId("test"))
                 .willReturn(new ExternalApiCredentials(1,test,test));
-        assertThat(externalApiRepository.findByKeyId(test).getValue().equals(test));
+        boolean result = externalApiRepository.findByKeyId(test).getValue().equals(test);
+        assertThat(result).isTrue();
     }
 }
