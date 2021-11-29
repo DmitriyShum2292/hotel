@@ -17,6 +17,7 @@ public class ApiExceptionHandler {
 
     private static final String EXC = "exception";
     private static final String STATUS = "status";
+    private static final String USER = "user";
 
     @ExceptionHandler(value = {NotFoundException.class})
     public ModelAndView notFoundException(NotFoundException e){
@@ -25,7 +26,7 @@ public class ApiExceptionHandler {
         mav.setViewName(EXC);
         mav.addObject(STATUS, HttpStatus.NOT_FOUND.toString());
         mav.addObject(EXC, e.getMessage());
-        mav.addObject("user",userService.findCurrentUser());
+        mav.addObject(USER,userService.findCurrentUser());
         return mav;
     }
     @ExceptionHandler(value = {ForbiddenException.class})
@@ -35,7 +36,7 @@ public class ApiExceptionHandler {
         mav.setViewName(EXC);
         mav.addObject(STATUS, HttpStatus.FORBIDDEN.toString());
         mav.addObject(EXC, e.getMessage());
-        mav.addObject("user",userService.findCurrentUser());
+        mav.addObject(USER,userService.findCurrentUser());
         return mav;
     }
     @ExceptionHandler(value = {JSONException.class})
@@ -45,7 +46,7 @@ public class ApiExceptionHandler {
         mav.setViewName(EXC);
         mav.addObject(STATUS, HttpStatus.INTERNAL_SERVER_ERROR.toString());
         mav.addObject(EXC, e.getMessage());
-        mav.addObject("user",userService.findCurrentUser());
+        mav.addObject(USER,userService.findCurrentUser());
         return mav;
     }
 }
