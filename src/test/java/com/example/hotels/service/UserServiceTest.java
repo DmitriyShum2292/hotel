@@ -64,10 +64,6 @@ class UserServiceTest {
         user.setOrders(Arrays.asList(new Order()));
     }
 
-    @Test
-    void save() {
-        //void method
-    }
     /**
      * This http method has been commented because in external module periodically changes citizen card number
      */
@@ -95,9 +91,12 @@ class UserServiceTest {
 
             JSONObject obj = new JSONObject(EntityUtils.toString(entity));
             Gson gson = new Gson();
-            ResidentReponseDTO residentReponseDTO = gson.fromJson(obj.getJSONObject("result").toString(), ResidentReponseDTO.class);
-            assertThat(response.getStatusLine().getStatusCode()==200);
-            assertThat(residentReponseDTO.isActive());
+            ResidentReponseDTO residentReponseDTO = gson.fromJson(obj.getJSONObject("result").toString(),
+                    ResidentReponseDTO.class);
+            boolean result = response.getStatusLine().getStatusCode()==200;
+            boolean result2 = residentReponseDTO.isActive();
+            assertThat(result).isTrue();
+            assertThat(result2).isTrue();
         }
     }
 
@@ -105,18 +104,21 @@ class UserServiceTest {
     void findByLogin() {
         when(userRepository.findByNickName(user.getNickName())).thenReturn(user);
         User testUser = userService.findByNickName(user.getNickName());
-        assertThat(testUser.getNickName().equals(user.getNickName()));
+        boolean result = testUser.getNickName().equals(user.getNickName());
+        assertThat(result).isTrue();
     }
 
     @Test
     void findOrdersByUser() {
-        assertThat(user.getOrders().size()>0);
+        boolean result = user.getOrders().size()>0;
+        assertThat(result).isTrue();
     }
 
     @Test
     void findByUserId() {
         given(userRepository.findByUserId(user.getUserId())).willReturn(user);
         User testUser = userService.findByUserId(user.getUserId());
-        assertThat(testUser.getUserId()==user.getUserId());
+        boolean result = testUser.getUserId()==user.getUserId();
+        assertThat(result).isTrue();
     }
 }
