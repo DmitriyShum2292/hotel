@@ -2,7 +2,6 @@ package com.example.hotels.service;
 
 import com.example.hotels.dto.ResidentReponseDTO;
 import com.example.hotels.hmac.HMACUtil;
-import com.example.hotels.model.ExternalApiCredentials;
 import com.example.hotels.model.Order;
 import com.example.hotels.model.User;
 import com.example.hotels.repository.UserRepository;
@@ -46,9 +45,9 @@ class UserServiceTest {
     private ExternalApiService externalApiService;
 
     @Value("${city.management.baseurl}")
-    private String BASE_URL;
+    private String baseUrl;
     @Value("${city.management.resident.card.mapping}")
-    private String RESIDENT_CARD_URL;
+    private String residentCardUrl;
     @Value("${hotels.keyid}")
     private String keyId;
     @Value("${city.management.action.get}")
@@ -60,7 +59,7 @@ class UserServiceTest {
     public static void init(){
         user = new User();
         user.setId(1);
-        user.setUserId(14876580);
+        user.setUserId(67368035);
         user.setNickName("Login");
         user.setOrders(Arrays.asList(new Order()));
     }
@@ -69,35 +68,37 @@ class UserServiceTest {
     void save() {
         //void method
     }
-
+    /**
+     * This http method has been commented because in external module periodically changes citizen card number
+     */
     @Test
     void citizenExist() throws IOException, JSONException {
         long now = new Date().getTime()+30000000;
         String timestamp = String.valueOf(now);
-        ExternalApiCredentials externalApiCredentials = externalApiService.findByKeyId(keyId);
-        String signature = hmacUtil.calculateHash(keyId,timestamp,action,externalApiCredentials.getValue());
+
+        String signature = hmacUtil.calculateHash(keyId,timestamp,action,"hotelKey");
 
         HttpUrl.Builder urlBuilder
-                = HttpUrl.parse(BASE_URL + RESIDENT_CARD_URL+user.getUserId()).newBuilder();
+                = HttpUrl.parse(baseUrl + residentCardUrl +user.getUserId()).newBuilder();
         String url = urlBuilder.build().toString();
 
-        CloseableHttpClient httpClient = HttpClients.createDefault();
+        try(CloseableHttpClient httpClient = HttpClients.createDefault()) {
 
-        HttpGet request = new HttpGet(url);
-        request.addHeader(HttpHeaders.USER_AGENT, "Googlebot");
-        request.addHeader("sm-keyid",keyId);
-        request.addHeader("sm-timestamp",timestamp);
-        request.addHeader("sm-action",action);
-        request.addHeader("sm-signature",signature);
-        CloseableHttpResponse response = httpClient.execute(request);
-        HttpEntity entity = response.getEntity();
+            HttpGet request = new HttpGet(url);
+            request.addHeader(HttpHeaders.USER_AGENT, "Googlebot");
+            request.addHeader("sm-keyid", keyId);
+            request.addHeader("sm-timestamp", timestamp);
+            request.addHeader("sm-action", action);
+            request.addHeader("sm-signature", signature);
+            CloseableHttpResponse response = httpClient.execute(request);
+            HttpEntity entity = response.getEntity();
 
-        JSONObject obj = new JSONObject(EntityUtils.toString(entity));
-        Gson gson = new Gson();
-        ResidentReponseDTO residentReponseDTO = gson.fromJson(obj.getJSONObject("result").toString(),ResidentReponseDTO.class);
-
-        assertThat(response.getStatusLine().getStatusCode()==200);
-        assertThat(residentReponseDTO.isActive());
+            JSONObject obj = new JSONObject(EntityUtils.toString(entity));
+            Gson gson = new Gson();
+            ResidentReponseDTO residentReponseDTO = gson.fromJson(obj.getJSONObject("result").toString(), ResidentReponseDTO.class);
+            assertThat(response.getStatusLine().getStatusCode()==200);
+            assertThat(residentReponseDTO.isActive());
+        }
     }
 
     @Test
