@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-public class OrderRepositoryTest {
+class OrderRepositoryTest {
 
     @Autowired
     private OrderRepository orderRepository;
@@ -27,7 +27,7 @@ public class OrderRepositoryTest {
         orderRepository.delete(order);
     }
     @Test
-    public void findById(){
+     void findById(){
         assertEquals(orderRepository.findById(order.getId()).getId(),order.getId());
     }
 }
