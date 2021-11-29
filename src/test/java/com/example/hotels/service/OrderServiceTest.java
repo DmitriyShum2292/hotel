@@ -64,7 +64,7 @@ class OrderServiceTest {
     public static void init(){
         user = new User();
         user.setNickName("Login");
-        user.setUserId(14876580);
+        user.setUserId(67368035);
         order = new Order();
         order.setId(1);
         order.setPeriod(1);
@@ -88,42 +88,43 @@ class OrderServiceTest {
 
     @Test
     void pay() throws IOException {
+
         Payment payment = new Payment("HOTELS","order",order.getTotalPrice(),
                 user.getUserId(),redirectUrl);
 
         long now = new Date().getTime()+30000000;
         String timestamp = String.valueOf(now);
-        String secretKey = externalApiService.findByKeyId(keyId).getValue();
+        String secretKey = "hotelKey";
         String signature = hmacUtil.calculateHash(keyId,timestamp,"action",secretKey);
-
 
         String url = "http://54.236.248.165/api/v1/payment/pay-url";
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = ow.writeValueAsString(payment);
         StringEntity entity = new StringEntity(json);
 
-        CloseableHttpClient client = HttpClients.createDefault();
 
-        HttpPost httpPost = new HttpPost(url);
-        httpPost.setHeader("Content-type", "application/json");
-        httpPost.addHeader(HttpHeaders.USER_AGENT, "Googlebot");
-        httpPost.setEntity(entity);
-        httpPost.addHeader("sm-keyid",keyId);
-        httpPost.addHeader("sm-timestamp",timestamp);
-        httpPost.addHeader("sm-action","action");
-        httpPost.addHeader("sm-signature",signature);
-        httpPost.setEntity(entity);
-        CloseableHttpResponse response = client.execute(httpPost);
+        try(CloseableHttpClient client = HttpClients.createDefault()) {
 
-        String obj = new String(EntityUtils.toString(response.getEntity()));
+            HttpPost httpPost = new HttpPost(url);
+            httpPost.setHeader("Content-type", "application/json");
+            httpPost.addHeader(HttpHeaders.USER_AGENT, "Googlebot");
+            httpPost.setEntity(entity);
+            httpPost.addHeader("sm-keyid", keyId);
+            httpPost.addHeader("sm-timestamp", timestamp);
+            httpPost.addHeader("sm-action", "action");
+            httpPost.addHeader("sm-signature", signature);
+            httpPost.setEntity(entity);
+            CloseableHttpResponse response = client.execute(httpPost);
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        PaymentUrlResponseDTO paymentUrlResponseDTO = objectMapper.readValue(obj,PaymentUrlResponseDTO.class);
+            String obj = EntityUtils.toString(response.getEntity());
 
-        response.close();
-        client.close();
+            ObjectMapper objectMapper = new ObjectMapper();
+            PaymentUrlResponseDTO paymentUrlResponseDTO = objectMapper.readValue(obj, PaymentUrlResponseDTO.class);
 
-        assertThat(paymentUrlResponseDTO!=null);
+            response.close();
+
+            assertThat(paymentUrlResponseDTO!=null);
+        }
     }
 
 
