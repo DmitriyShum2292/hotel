@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-public class HotelRepositoryTest {
+class HotelRepositoryTest {
 
     @Autowired
     private HotelRepository hotelRepository;
@@ -29,19 +29,19 @@ public class HotelRepositoryTest {
     }
 
     @Test
-    public void findById(){
+    void findById(){
         assertEquals(hotelRepository.findById(hotel.getId()).getId(),hotel.getId());
     }
     @Test
-    public void findByName(){
+    void findByName(){
         assertEquals(hotelRepository.findByName(hotel.getName()).getName(),hotel.getName());
     }
     @Test
-    public void findAll(){
+    void findAll(){
         assertEquals(hotelRepository.findAll().contains(hotel),true);
     }
     @Test
-    public void findAllByNameStartingWithIgnoreCase(){
+    void findAllByNameStartingWithIgnoreCase(){
         assertEquals(hotelRepository.findAllByNameStartingWithIgnoreCase("hot").contains(hotel),true);
     }
 }
