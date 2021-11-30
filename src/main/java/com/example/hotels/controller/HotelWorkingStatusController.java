@@ -1,6 +1,5 @@
 package com.example.hotels.controller;
 
-
 import com.example.hotels.dto.HotelDTO;
 import com.example.hotels.hmac.HMACAuthFilter;
 import com.example.hotels.model.Hotel;
@@ -15,6 +14,9 @@ import javax.servlet.ServletRequest;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Controller for set hotel working status
+ */
 @RestController
 @RequestMapping("/api/v1/hotels")
 public class HotelWorkingStatusController {
@@ -26,6 +28,12 @@ public class HotelWorkingStatusController {
     @Autowired
     private HMACAuthFilter hmacAuthFilter;
 
+    /**
+     * @param page
+     * @param size
+     * @param sort
+     * receive Get requests with params for pagination,sorting, then return hotels list
+     */
     @GetMapping
     public ResponseEntity<List<HotelDTO>> hotelsList(@RequestParam(required = false,defaultValue = "0") int page,
                                                   @RequestParam(required = false,defaultValue = "50") int size,
@@ -35,6 +43,13 @@ public class HotelWorkingStatusController {
         return new ResponseEntity<>(hotelDTOS, HttpStatus.OK);
     }
 
+    /**
+     * @param hotelDTO
+     * @param request
+     * @throws IOException
+     * @throws ServletException
+     * receive Post http requests with  hotelDTO , set working status for hotel and save in db
+     */
     @PostMapping
     public ResponseEntity<HotelDTO> setWorkingStatus(@RequestBody HotelDTO hotelDTO,ServletRequest request)
             throws IOException, ServletException {
