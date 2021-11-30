@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
+/**
+ * Controller waiting request from citizen account module after payment is done
+ */
 @RestController
 @RequestMapping("/api/v1/payment")
 public class PaymentResponseController {
@@ -21,7 +24,8 @@ public class PaymentResponseController {
     private UserService userService;
 
     /**
-     * receive response after payment is done in citizen account module
+     * receive request after payment is done in citizen account module
+     * return ApiResponse object
      */
     @PostMapping
     public ResponseEntity<ApiResponse> setPaid(@RequestBody CompleteRequestDTO completeRequestDTO) throws IOException {

@@ -111,6 +111,11 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * @param user
+     * return info about user from city management
+     * @throws IOException
+     */
     @Override
     public ResidentReponseDTO getCitizenInfo(User user) throws IOException {
         long now = new Date().getTime()+30000000;

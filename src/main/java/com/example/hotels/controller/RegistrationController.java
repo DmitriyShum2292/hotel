@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+/**
+ * Controller for registration
+ */
 @Controller
 @RequestMapping("/registration")
 public class RegistrationController {
@@ -17,12 +20,22 @@ public class RegistrationController {
     @Autowired
     private UserService userService;
 
+    /**
+     * @param model
+     * return registration page
+     */
     @GetMapping
     public String registerPage(Model model){
         model.addAttribute("user",new User());
         return "registration";
     }
 
+    /**
+     * @param user
+     * @param bindingResult
+     * @param model
+     * return redirect to cabinet after registration is done
+     */
     @PostMapping
     public String register(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,Model model){
         if (bindingResult.hasErrors()) {

@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.io.IOException;
 
+/**
+ * Controller for get user info by order from city management module
+ */
 @Controller
 @RequestMapping("/admin/user")
 public class UserInfoController {
@@ -19,6 +22,12 @@ public class UserInfoController {
     @Autowired
     private UserService userService;
 
+    /**
+     * @param id
+     * @param model
+     * return user info page with user information from city management
+     * @throws IOException
+     */
     @GetMapping("/{id}")
     public String userInfo(@PathVariable long id, Model model) throws IOException {
         User user = userService.findCurrentUser();

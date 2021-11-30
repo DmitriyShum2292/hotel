@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * Controller for hotel page
+ */
 @Controller
 @RequestMapping("/hotel")
 public class HotelController {
@@ -21,6 +24,11 @@ public class HotelController {
     @Autowired
     private UserService userService;
 
+    /**
+     * @param id
+     * @param model
+     * return hotel page
+     */
     @GetMapping("/{id}")
     public String hotelPage(@PathVariable long id, Model model){
         Hotel hotel = hotelService.findById(id);

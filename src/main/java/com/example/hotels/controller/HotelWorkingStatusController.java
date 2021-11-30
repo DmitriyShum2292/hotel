@@ -49,6 +49,7 @@ public class HotelWorkingStatusController {
      * @throws IOException
      * @throws ServletException
      * receive Post http requests with  hotelDTO , set working status for hotel and save in db
+     * return hotelDTO object
      */
     @PostMapping
     public ResponseEntity<HotelDTO> setWorkingStatus(@RequestBody HotelDTO hotelDTO,ServletRequest request)

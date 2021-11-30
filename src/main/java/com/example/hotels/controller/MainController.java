@@ -11,6 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * Controller for main page
+ */
 @Controller
 @RequestMapping("/")
 public class MainController {
@@ -24,6 +27,10 @@ public class MainController {
     @Autowired
     private OrderService orderService;
 
+    /**
+     * @param model
+     * return main page
+     */
     @GetMapping
     public String mainPage(Model model) {
         User user;

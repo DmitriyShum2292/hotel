@@ -21,6 +21,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller for Admin cabinet(Hotel manager)
+ */
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -37,6 +40,11 @@ public class AdminController {
     private static final String CREATE_HOTEL = "create_hotel";
     private static final String ORDERS = "orders";
 
+    /**
+     * @param name
+     * @param model
+     * return admin page with his hotel and orders
+     */
     @GetMapping
     public String adminPage(@RequestParam(required = false,defaultValue = "0") String name, Model model){
         User user = userService.findCurrentUser();
@@ -55,6 +63,17 @@ public class AdminController {
         model.addAttribute(HOTEL_NAME, user.getHotel());
         return "admin_cabinet";
     }
+
+    /**
+     * @param districtId
+     * @param streetId
+     * @param buildingId
+     * @param homeId
+     * @param model
+     * return choosing a district page,then choosing a street page,
+     * then choosing building page, then create hotel page
+     * @throws IOException
+     */
     @GetMapping("/hotel")
     public String createHotelPage(@RequestParam(required = false) Long districtId,
                                   @RequestParam(required = false) Long streetId,
@@ -105,6 +124,14 @@ public class AdminController {
 
         return CREATE_HOTEL;
     }
+
+    /**
+     * @param hotel
+     * @param bindingResult
+     * @param model
+     * return redirect to admin page after saving hotel
+     * @throws IOException
+     */
     @PostMapping("/hotel")
     public String createHotel(@ModelAttribute("hotel") @Valid Hotel hotel, BindingResult bindingResult,
                               Model model) throws IOException {
@@ -120,6 +147,11 @@ public class AdminController {
         userService.save(user);
         return REDIRECT_ADMIN;
     }
+
+    /**
+     * @param model
+     * return update hotel page
+     */
     @GetMapping("/hotel/update")
     public String updateHotelPage(Model model){
         User user = userService.findCurrentUser();
@@ -127,11 +159,21 @@ public class AdminController {
         model.addAttribute(HOTEL_NAME, user.getHotel());
         return "update_hotel";
     }
+
+    /**
+     * @param hotel
+     * return redirect to admin cabinet after hotel update
+     */
     @PostMapping("/hotel/update")
     public String updateHotel(@ModelAttribute("hotel")Hotel hotel){
         hotelService.update(hotel);
         return REDIRECT_ADMIN;
     }
+
+    /**
+     * @param id
+     * return redirect to admin cabinet after hotel delete
+     */
     @GetMapping("/hotel/{id}")
     public String deleteHotel(@PathVariable long id){
         hotelService.delete(id);

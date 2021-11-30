@@ -18,6 +18,9 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 
+/**
+ * Controller for simple user cabinet
+ */
 @Controller
 @RequestMapping("/cabinet")
 public class CabinetController {
@@ -32,6 +35,14 @@ public class CabinetController {
     private static final String HOTELS = "hotels";
     private static final String REDIRECT_CAB = "redirect:/cabinet";
 
+    /**
+     * @param page
+     * @param size
+     * @param name
+     * @param sort
+     * @param model
+     * return cabinet page with hotel list and order list
+     */
     @GetMapping
     public String cabinet(@RequestParam(required = false,defaultValue = "0") int page,
                           @RequestParam(required = false,defaultValue = "10") int size,
@@ -53,6 +64,14 @@ public class CabinetController {
         model.addAttribute("sort", sort);
         return "cabinet";
     }
+
+    /**
+     * @param page
+     * @param size
+     * @param sort
+     * @param model
+     * return cabinet with hotels paginated and sorted
+     */
     @GetMapping("/{page}")
     public String cabinetPagination(@PathVariable int page,
                           @RequestParam(required = false,defaultValue = "10") int size,
@@ -69,6 +88,11 @@ public class CabinetController {
         return "cabinet";
     }
 
+    /**
+     * @param hotel
+     * @param model
+     * return order page
+     */
     @GetMapping("/order/{hotel}")
     public String createOrderPage(@PathVariable String hotel , Model model){
         User user = userService.findCurrentUser();
@@ -79,6 +103,12 @@ public class CabinetController {
         return "order";
     }
 
+    /**
+     * @param hotelName
+     * @param period
+     * @param booking
+     * return redirect to cabinet after order saved
+     */
     @PostMapping("/order")
     public String createOrder(@RequestParam String hotelName ,@RequestParam int period ,
                               @RequestParam String booking) {
@@ -89,12 +119,21 @@ public class CabinetController {
         return REDIRECT_CAB;
     }
 
+    /**
+     * @param id
+     * return redirect to cabinet after deleting order
+     */
     @GetMapping("/order/delete/{id}")
     public String deleteOrder(@PathVariable long id){
         orderService.delete(id);
         return REDIRECT_CAB;
     }
 
+    /**
+     * @param id
+     * return redirect to payment by url from citizen account
+     * @throws IOException
+     */
     @PostMapping("/pay")
     public RedirectView pay(@RequestParam long id) throws IOException {
         Order order = orderService.findById(id);
