@@ -1,6 +1,7 @@
 package com.example.hotels.controller;
 
 import com.example.hotels.dto.ResidentReponseDTO;
+import com.example.hotels.logging.Loggable;
 import com.example.hotels.model.User;
 import com.example.hotels.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ public class UserInfoController {
      * @throws IOException
      */
     @GetMapping("/{id}")
+    @Loggable
     public String userInfo(@PathVariable long id, Model model) throws IOException {
         User user = userService.findCurrentUser();
         User userInfo = userService.findById(id);
