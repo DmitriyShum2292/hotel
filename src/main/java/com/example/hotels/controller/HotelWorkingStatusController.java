@@ -2,6 +2,7 @@ package com.example.hotels.controller;
 
 import com.example.hotels.dto.HotelDTO;
 import com.example.hotels.hmac.HMACAuthFilter;
+import com.example.hotels.logging.Loggable;
 import com.example.hotels.model.Hotel;
 import com.example.hotels.service.HotelService;
 import com.example.hotels.service.MappingUtilService;
@@ -35,6 +36,7 @@ public class HotelWorkingStatusController {
      * receive Get requests with params for pagination,sorting, then return hotels list
      */
     @GetMapping
+    @Loggable
     public ResponseEntity<List<HotelDTO>> hotelsList(@RequestParam(required = false,defaultValue = "0") int page,
                                                   @RequestParam(required = false,defaultValue = "50") int size,
                                                   @RequestParam(required = false,defaultValue = "name") String sort){
@@ -52,6 +54,7 @@ public class HotelWorkingStatusController {
      * return hotelDTO object
      */
     @PostMapping
+    @Loggable
     public ResponseEntity<HotelDTO> setWorkingStatus(@RequestBody HotelDTO hotelDTO,ServletRequest request)
             throws IOException, ServletException {
         if(hmacAuthFilter.doFilter(request)) {
@@ -66,6 +69,7 @@ public class HotelWorkingStatusController {
     }
 
     @GetMapping("/test")
+    @Loggable
     public ResponseEntity<String> test(ServletRequest request) throws ServletException, IOException {
         if(hmacAuthFilter.doFilter(request)){
             return new ResponseEntity<>("Success!",HttpStatus.OK);

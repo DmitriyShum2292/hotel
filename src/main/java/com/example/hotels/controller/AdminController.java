@@ -5,6 +5,7 @@ import com.example.hotels.dto.CommercialBuildingDTO;
 import com.example.hotels.dto.DistrictDTO;
 import com.example.hotels.dto.StreetDTO;
 import com.example.hotels.exception.NotFoundException;
+import com.example.hotels.logging.Loggable;
 import com.example.hotels.model.Hotel;
 import com.example.hotels.model.Order;
 import com.example.hotels.model.User;
@@ -75,6 +76,7 @@ public class AdminController {
      * @throws IOException
      */
     @GetMapping("/hotel")
+    @Loggable
     public String createHotelPage(@RequestParam(required = false) Long districtId,
                                   @RequestParam(required = false) Long streetId,
                                   @RequestParam(required = false)Long buildingId,

@@ -2,6 +2,7 @@ package com.example.hotels.controller;
 
 import com.example.hotels.dto.ApiResponse;
 import com.example.hotels.dto.CompleteRequestDTO;
+import com.example.hotels.logging.Loggable;
 import com.example.hotels.service.OrderService;
 import com.example.hotels.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ public class PaymentResponseController {
      * return ApiResponse object
      */
     @PostMapping
+    @Loggable
     public ResponseEntity<ApiResponse> setPaid(@RequestBody CompleteRequestDTO completeRequestDTO) throws IOException {
         orderService.setPaid(completeRequestDTO);
 

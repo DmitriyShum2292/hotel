@@ -1,6 +1,7 @@
 package com.example.hotels.controller;
 
 import com.example.hotels.exception.NotFoundException;
+import com.example.hotels.logging.Loggable;
 import com.example.hotels.model.Hotel;
 import com.example.hotels.model.Order;
 import com.example.hotels.model.User;
@@ -135,6 +136,7 @@ public class CabinetController {
      * @throws IOException
      */
     @PostMapping("/pay")
+    @Loggable
     public RedirectView pay(@RequestParam long id) throws IOException {
         Order order = orderService.findById(id);
         if (order.isPaid()){

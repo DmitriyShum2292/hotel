@@ -1,5 +1,6 @@
 package com.example.hotels.controller;
 
+import com.example.hotels.logging.Loggable;
 import com.example.hotels.model.User;
 import com.example.hotels.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,7 @@ public class RegistrationController {
      * return redirect to cabinet after registration is done
      */
     @PostMapping
+    @Loggable
     public String register(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,Model model){
         if (bindingResult.hasErrors()) {
             model.addAttribute("error",bindingResult.getFieldErrors());
